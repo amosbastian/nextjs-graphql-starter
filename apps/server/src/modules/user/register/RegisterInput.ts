@@ -14,6 +14,6 @@ export class RegisterInput {
   @IsEmailAlreadyExist({ message: "Email is already taken!" })
   email: string;
 
-  @Field({ nullable: true })
-  password?: string;
+  @Field()
+  password: string;
 }

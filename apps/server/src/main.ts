@@ -10,14 +10,7 @@ import connectRedis from "connect-redis";
 import cors from "cors";
 import { redis } from "./redis";
 import { LoginResolver } from "./modules/user/Login";
-
-@Resolver()
-class HelloWorldResolver {
-  @Query(() => String)
-  async hello() {
-    return "Hello, World";
-  }
-}
+import { MeResolver } from "./modules/user/Me";
 
 const main = async () => {
   await createConnection({
@@ -34,7 +27,7 @@ const main = async () => {
   });
 
   const schema = await buildSchema({
-    resolvers: [HelloWorldResolver, RegisterResolver, LoginResolver],
+    resolvers: [MeResolver, RegisterResolver, LoginResolver],
   });
 
   const apolloServer = new ApolloServer({

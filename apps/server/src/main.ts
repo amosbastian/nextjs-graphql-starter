@@ -11,6 +11,7 @@ import cors from "cors";
 import { redis } from "./redis";
 import { LoginResolver } from "./modules/user/Login";
 import { MeResolver } from "./modules/user/Me";
+import { LogoutResolver } from "./modules/user/Logout";
 
 const main = async () => {
   await createConnection({
@@ -27,12 +28,17 @@ const main = async () => {
   });
 
   const schema = await buildSchema({
-    resolvers: [MeResolver, RegisterResolver, LoginResolver],
+    resolvers: [
+      LoginResolver,
+      LogoutResolver,
+      MeResolver,
+      RegisterResolver,
+    ],
   });
 
   const apolloServer = new ApolloServer({
     schema,
-    context: ({ req }) => ({ req }),
+    context: ({ req, res }) => ({ req, res }),
   });
 
   const app = express();

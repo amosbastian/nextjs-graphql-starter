@@ -26,6 +26,11 @@ export class LoginResolver {
       return null;
     }
 
+    // TODO: throw an Error
+    if (!user.confirmedEmail) {
+      return null;
+    }
+
     context.req.session.userId = user.id;
 
     return user;

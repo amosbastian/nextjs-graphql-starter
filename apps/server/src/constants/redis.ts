@@ -1,2 +1,2 @@
-export const emailConfirmationPrefix = "email-confirmation:";
+export const confirmEmailPrefix = "confirm-email:";
 export const forgotPasswordPrefix = "forgot-password:";

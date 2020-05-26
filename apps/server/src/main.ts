@@ -14,6 +14,7 @@ import { MeResolver } from "./modules/user/Me";
 import { LogoutResolver } from "./modules/user/Logout";
 import { ConfirmUserEmailResolver } from "./modules/user/ConfirmUserEmail";
 import { ForgotPasswordResolver } from "./modules/user/ForgotPassword";
+import { ChangePasswordResolver } from "./modules/user/ChangePassword";
 
 const main = async () => {
   await createConnection({
@@ -31,12 +32,13 @@ const main = async () => {
 
   const schema = await buildSchema({
     resolvers: [
+      ChangePasswordResolver,
       ConfirmUserEmailResolver,
+      ForgotPasswordResolver,
       LoginResolver,
       LogoutResolver,
       MeResolver,
       RegisterResolver,
-      ForgotPasswordResolver,
     ],
   });
 

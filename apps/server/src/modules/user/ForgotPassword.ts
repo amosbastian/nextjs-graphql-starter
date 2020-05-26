@@ -19,6 +19,7 @@ export class ForgotPasswordResolver {
     }
 
     const token = v4();
+
     await redis.set(
       forgotPasswordPrefix + token,
       user.id,

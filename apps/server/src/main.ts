@@ -13,6 +13,7 @@ import { LoginResolver } from "./modules/user/Login";
 import { MeResolver } from "./modules/user/Me";
 import { LogoutResolver } from "./modules/user/Logout";
 import { ConfirmUserEmailResolver } from "./modules/user/ConfirmUserEmail";
+import { ForgotPasswordResolver } from "./modules/user/ForgotPassword";
 
 const main = async () => {
   await createConnection({
@@ -35,6 +36,7 @@ const main = async () => {
       LogoutResolver,
       MeResolver,
       RegisterResolver,
+      ForgotPasswordResolver,
     ],
   });
 

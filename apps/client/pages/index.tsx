@@ -5,6 +5,7 @@ import {
   useMutation,
   useApolloClient,
 } from "@apollo/react-hooks";
+import { useRouter } from "next/router";
 import gql from "graphql-tag";
 
 const ME = gql`
@@ -34,8 +35,10 @@ const LOGOUT = gql`
 `;
 
 export const Index = () => {
+  const router = useRouter();
   const client = useApolloClient();
-  const { data } = useQuery(ME, { fetchPolicy: "network-only" });
+  const { data, loading } = useQuery(ME);
+
   const [login] = useMutation(LOGIN, {
     update: (cache, { data }) => {
       if (!data || !data.login) {
@@ -53,24 +56,30 @@ export const Index = () => {
     onCompleted: () => client.resetStore(),
   });
 
-  console.log(data);
+  if (!loading && data.me === null && typeof window !== "undefined") {
+    router.push("/login");
+  }
 
-  return (
-    <div>
-      <header>
-        <h1>Welcome to client!</h1>
-      </header>
-      <main>
-        <button type="button" onClick={() => login()}>
-          Login
-        </button>
-        <button type="button" onClick={() => logout()}>
-          Logout
-        </button>
-        <pre>{JSON.stringify(data?.me, null, 2)}</pre>
-      </main>
-    </div>
-  );
+  if (data && data.me) {
+    return (
+      <div>
+        <header>
+          <h1>Welcome to client!</h1>
+        </header>
+        <main>
+          <button type="button" onClick={() => login()}>
+            Login
+          </button>
+          <button type="button" onClick={() => logout()}>
+            Logout
+          </button>
+          <pre>{JSON.stringify(data?.me, null, 2)}</pre>
+        </main>
+      </div>
+    );
+  }
+
+  return <div>Loading...</div>;
 };
 
 export default withApollo(Index);

@@ -1,5 +1,5 @@
 import React from "react";
-import withApollo from "../apollo/client";
+import withApollo from "../apollo/withApollo";
 import {
   useQuery,
   useMutation,
@@ -36,7 +36,19 @@ const LOGOUT = gql`
 export const Index = () => {
   const client = useApolloClient();
   const { data } = useQuery(ME, { fetchPolicy: "network-only" });
-  const [login] = useMutation(LOGIN);
+  const [login] = useMutation(LOGIN, {
+    update: (cache, { data }) => {
+      if (!data || !data.login) {
+        return;
+      }
+      cache.writeQuery({
+        query: ME,
+        data: {
+          me: data.login,
+        },
+      });
+    },
+  });
   const [logout] = useMutation(LOGOUT, {
     onCompleted: () => client.resetStore(),
   });
@@ -55,6 +67,7 @@ export const Index = () => {
         <button type="button" onClick={() => logout()}>
           Logout
         </button>
+        <pre>{JSON.stringify(data?.me, null, 2)}</pre>
       </main>
     </div>
   );

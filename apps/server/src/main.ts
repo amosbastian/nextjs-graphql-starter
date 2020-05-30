@@ -4,7 +4,7 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import { User } from "./entity/User";
-import { RegisterResolver } from "./modules/user/Register";
+import { RegisterUserResolver } from "./modules/user/RegisterUser";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import cors from "cors";
@@ -25,7 +25,7 @@ const main = async () => {
     username: "postgres",
     password: "postgres",
     database: "nextjs-graphql-starter",
-    logging: true,
+    logging: false,
     synchronize: true,
     entities: [User],
   });
@@ -38,13 +38,18 @@ const main = async () => {
       LoginResolver,
       LogoutResolver,
       MeResolver,
-      RegisterResolver,
+      RegisterUserResolver,
     ],
   });
 
   const apolloServer = new ApolloServer({
     schema,
     context: ({ req, res }) => ({ req, res }),
+    playground: {
+      settings: {
+        "request.credentials": "include",
+      },
+    },
   });
 
   const app = express();
@@ -53,7 +58,7 @@ const main = async () => {
   app.use(
     cors({
       credentials: true,
-      origin: "http://localhost:3000",
+      origin: "http://localhost:4200",
     }),
   );
 
@@ -63,7 +68,7 @@ const main = async () => {
         client: redis,
       }),
       name: "qid",
-      secret: "abc123",
+      secret: process.env.SESSION_SECRET || "abc123",
       resave: false,
       saveUninitialized: false,
       cookie: {
@@ -74,7 +79,7 @@ const main = async () => {
     }),
   );
 
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({ app, cors: false });
 
   const port = process.env.port || 3333;
 

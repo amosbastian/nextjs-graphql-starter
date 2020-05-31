@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import Typography from "@material-ui/core/Typography";
-import Link from "next/link";
 
 import AuthenticationLayout from "../components/authentication-layout/authentication-layout";
 import LoginForm from "../components/login-form/login-form";
+import NavigationLink from "../components/navigation-link/navigation-link";
 import withApollo from "../apollo/withApollo";
 
 const StyledNav = styled.nav`
@@ -30,9 +30,9 @@ export const Login = () => {
     <AuthenticationLayout>
       <StyledNav>
         Not a member?{" "}
-        <Link href="signup">
+        <NavigationLink href="signup" underline="none">
           <a>Sign up now!</a>
-        </Link>
+        </NavigationLink>
       </StyledNav>
       <StyledDiv>
         <Typography component="h1" variant="h5">

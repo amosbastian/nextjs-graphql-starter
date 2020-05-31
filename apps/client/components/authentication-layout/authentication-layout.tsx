@@ -2,13 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import Container from "@material-ui/core/Container";
 import Hidden from "@material-ui/core/Hidden";
+import Paper from "@material-ui/core/Paper";
 
 const StyledDiv = styled.div`
   display: grid;
   height: 100vh;
 
   ${({ theme }) => theme.breakpoints.up("sm")} {
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 2fr 3fr;
   }
 `;
 
@@ -34,7 +35,7 @@ const AuthenticationLayout: React.FC = ({ children }) => {
       <Hidden xsDown>
         <StyledSidebarSection />
       </Hidden>
-      <StyledMainSection component="section">
+      <StyledMainSection component={Paper} elevation={8} square>
         {children}
       </StyledMainSection>
     </StyledDiv>

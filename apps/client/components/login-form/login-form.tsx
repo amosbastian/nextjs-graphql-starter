@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 import {
   LoginMutation,
   LoginMutationVariables,
 } from "@nextjs-graphql-starter/codegen";
-import TextInput from "../text-input/text-input";
 import { useApolloClient, useMutation } from "@apollo/react-hooks";
 import { useRouter } from "next/router";
-import Button from "../button/button";
 import { gql } from "apollo-boost";
 import { ME } from "../../pages/index";
 
@@ -15,8 +15,7 @@ const StyledForm = styled.form`
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: max-content;
-  gap: 1.5rem;
-
+  gap: 1rem;
   width: 20rem;
 `;
 
@@ -80,17 +79,36 @@ export const LoginForm: React.FC = () => {
 
   return (
     <StyledForm onSubmit={handleSubmit}>
-      <TextInput label="Email" required type="email" name="email" />
-      <TextInput
-        label="Password"
-        name="password"
-        type="password"
+      <TextField
+        variant="outlined"
         required
+        fullWidth
+        id="email"
+        label="Email Address"
+        name="email"
+        autoComplete="email"
+        autoFocus
+        size="small"
       />
-      <StyledDiv>Forgot your password?</StyledDiv>
-      <p>
-        <Button type="submit">Login</Button>
-      </p>
+      <TextField
+        variant="outlined"
+        required
+        fullWidth
+        name="password"
+        label="Password"
+        type="password"
+        id="password"
+        autoComplete="password"
+        size="small"
+      />
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        color="primary"
+      >
+        Log in
+      </Button>
     </StyledForm>
   );
 };

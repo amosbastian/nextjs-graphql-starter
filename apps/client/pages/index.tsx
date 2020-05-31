@@ -8,20 +8,9 @@ import {
 import { useRouter } from "next/router";
 import gql from "graphql-tag";
 
-const ME = gql`
+export const ME = gql`
   query me {
     me {
-      id
-      username
-    }
-  }
-`;
-
-const LOGIN = gql`
-  mutation login {
-    login(
-      input: { email: "amos_bastian@hotmail.com", password: "123456" }
-    ) {
       id
       username
     }
@@ -38,20 +27,6 @@ export const Index = () => {
   const router = useRouter();
   const client = useApolloClient();
   const { data, loading } = useQuery(ME);
-
-  const [login] = useMutation(LOGIN, {
-    update: (cache, { data }) => {
-      if (!data || !data.login) {
-        return;
-      }
-      cache.writeQuery({
-        query: ME,
-        data: {
-          me: data.login,
-        },
-      });
-    },
-  });
   const [logout] = useMutation(LOGOUT, {
     onCompleted: () => client.resetStore(),
   });
@@ -67,9 +42,6 @@ export const Index = () => {
           <h1>Welcome to client!</h1>
         </header>
         <main>
-          <button type="button" onClick={() => login()}>
-            Login
-          </button>
           <button type="button" onClick={() => logout()}>
             Logout
           </button>

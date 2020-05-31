@@ -85,7 +85,10 @@ export type MeQuery = (
   )> }
 );
 
-export type LoginMutationVariables = {};
+export type LoginMutationVariables = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
 
 
 export type LoginMutation = (
@@ -139,8 +142,8 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = ApolloReactCommon.QueryResult<MeQuery, MeQueryVariables>;
 export const LoginDocument = gql`
-    mutation login {
-  login(input: {email: "amos_bastian@hotmail.com", password: "123456"}) {
+    mutation login($email: String!, $password: String!) {
+  login(input: {email: $email, password: $password}) {
     id
     username
   }
@@ -161,6 +164,8 @@ export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, 
  * @example
  * const [loginMutation, { data, loading, error }] = useLoginMutation({
  *   variables: {
+ *      email: // value for 'email'
+ *      password: // value for 'password'
  *   },
  * });
  */

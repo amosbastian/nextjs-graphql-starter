@@ -1,10 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import { useLoginMutation } from "@nextjs-graphql-starter/codegen";
+import {
+  LoginMutation,
+  LoginMutationVariables,
+} from "@nextjs-graphql-starter/codegen";
 import TextInput from "../text-input/text-input";
-import { useApolloClient } from "@apollo/react-hooks";
+import { useApolloClient, useMutation } from "@apollo/react-hooks";
 import { useRouter } from "next/router";
 import Button from "../button/button";
+import { gql } from "apollo-boost";
+import { ME } from "../../pages/index";
 
 const StyledForm = styled.form`
   display: grid;
@@ -20,10 +25,35 @@ const StyledDiv = styled.div`
   justify-content: flex-end;
 `;
 
+const LOGIN = gql`
+  mutation login($email: String!, $password: String!) {
+    login(input: { email: $email, password: $password }) {
+      id
+      username
+    }
+  }
+`;
+
 export const LoginForm: React.FC = () => {
   const client = useApolloClient();
   const router = useRouter();
-  const [login] = useLoginMutation();
+  const [login] = useMutation<LoginMutation, LoginMutationVariables>(
+    LOGIN,
+    {
+      update: (cache, { data }) => {
+        if (!data || !data.login) {
+          return;
+        }
+
+        cache.writeQuery({
+          query: ME,
+          data: {
+            me: data.login,
+          },
+        });
+      },
+    },
+  );
 
   async function handleSubmit(event) {
     event.preventDefault();

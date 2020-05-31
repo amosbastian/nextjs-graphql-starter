@@ -1,6 +1,15 @@
 import React, { ReactElement } from "react";
 import Document, { Head, Main, NextScript } from "next/document";
-import { ServerStyleSheet } from "styled-components";
+import { ServerStyleSheet, css } from "styled-components";
+
+const globalStyles = css`
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont;
+
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
+  }
+`;
 
 export default class CustomDocument extends Document<{
   styleTags: ReactElement[];
@@ -30,6 +39,7 @@ export default class CustomDocument extends Document<{
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
           />
+          <style type="text/css">{globalStyles}</style>
           {this.props.styleTags}
         </Head>
         <body>

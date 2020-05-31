@@ -11,8 +11,4 @@ const SiteLayout: React.FC = ({ children }) => {
   );
 };
 
-export const getLayout = (page: NextPage) => (
-  <SiteLayout>{page}</SiteLayout>
-);
-
 export default SiteLayout;

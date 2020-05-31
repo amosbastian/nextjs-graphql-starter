@@ -24,7 +24,6 @@ const StyledSidebarSection = styled.section`
 const StyledMainSection = styled(Container)`
   display: flex !important;
   flex-direction: column;
-  position: relative;
   justify-content: center;
   align-items: center;
 ` as typeof Container;

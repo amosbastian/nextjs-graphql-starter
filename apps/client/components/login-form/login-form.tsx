@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import {
   LoginMutation,
@@ -10,6 +9,7 @@ import { useApolloClient, useMutation } from "@apollo/react-hooks";
 import { useRouter } from "next/router";
 import { gql } from "apollo-boost";
 import { ME } from "../../pages/index";
+import ProgressButton from "../progress-button/progress-button";
 
 const StyledForm = styled.form`
   display: grid;
@@ -17,11 +17,6 @@ const StyledForm = styled.form`
   grid-auto-rows: max-content;
   gap: 1rem;
   width: 20rem;
-`;
-
-const StyledDiv = styled.div`
-  display: flex;
-  justify-content: flex-end;
 `;
 
 const LOGIN = gql`
@@ -36,23 +31,23 @@ const LOGIN = gql`
 export const LoginForm: React.FC = () => {
   const client = useApolloClient();
   const router = useRouter();
-  const [login] = useMutation<LoginMutation, LoginMutationVariables>(
-    LOGIN,
-    {
-      update: (cache, { data }) => {
-        if (!data || !data.login) {
-          return;
-        }
+  const [login, { loading }] = useMutation<
+    LoginMutation,
+    LoginMutationVariables
+  >(LOGIN, {
+    update: (cache, { data }) => {
+      if (!data || !data.login) {
+        return;
+      }
 
-        cache.writeQuery({
-          query: ME,
-          data: {
-            me: data.login,
-          },
-        });
-      },
+      cache.writeQuery({
+        query: ME,
+        data: {
+          me: data.login,
+        },
+      });
     },
-  );
+  });
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -101,14 +96,15 @@ export const LoginForm: React.FC = () => {
         autoComplete="password"
         size="small"
       />
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
+      <ProgressButton
         color="primary"
+        fullWidth
+        loading={loading}
+        type="submit"
+        variant="contained"
       >
         Log in
-      </Button>
+      </ProgressButton>
     </StyledForm>
   );
 };

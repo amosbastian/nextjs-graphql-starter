@@ -1,28 +1,29 @@
 import React from "react";
 import styled from "styled-components";
+import Hidden from "@material-ui/core/Hidden";
 
 const StyledDiv = styled.div`
   display: grid;
   height: 100vh;
 
-  @media (min-width: 900px) {
-    grid-template-columns: 20rem 1fr;
+  ${({ theme }) => theme.breakpoints.up("sm")} {
+    grid-template-columns: 1fr 3fr;
   }
 `;
 
 const StyledSidebarSection = styled.section`
-  background-color: grey;
-  display: none;
-
-  @media (min-width: 900px) {
-    display: flex;
-  }
+  background-image: url("https://source.unsplash.com/random");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 `;
 
 const AuthenticationLayout: React.FC = ({ children }) => {
   return (
     <StyledDiv>
-      <StyledSidebarSection>Sidebar</StyledSidebarSection>
+      <Hidden xsDown>
+        <StyledSidebarSection />
+      </Hidden>
       {children}
     </StyledDiv>
   );

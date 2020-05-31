@@ -17,7 +17,9 @@
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "paths": {}
+    "paths": {
+      "@nextjs-graphql-starter/graphql": ["libs/graphql/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

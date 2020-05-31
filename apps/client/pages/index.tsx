@@ -1,4 +1,8 @@
 import React from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Typography from "@material-ui/core/Typography";
 import withApollo from "../apollo/withApollo";
 import {
   useQuery,
@@ -23,6 +27,18 @@ const LOGOUT = gql`
   }
 `;
 
+const StyledDiv = styled.div`
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
+
+const StyledMain = styled.main`
+  display: grid;
+  gap: 1rem;
+`;
+
 export const Index = () => {
   const router = useRouter();
   const client = useApolloClient();
@@ -37,21 +53,27 @@ export const Index = () => {
 
   if (data && data.me) {
     return (
-      <div>
-        <header>
-          <h1>Welcome to client!</h1>
-        </header>
-        <main>
-          <button type="button" onClick={() => logout()}>
+      <StyledDiv>
+        <StyledMain>
+          <Typography variant="h1">You are logged in!</Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => logout()}
+          >
             Logout
-          </button>
+          </Button>
           <pre>{JSON.stringify(data?.me, null, 2)}</pre>
-        </main>
-      </div>
+        </StyledMain>
+      </StyledDiv>
     );
   }
 
-  return <div>Loading...</div>;
+  return (
+    <StyledDiv>
+      <CircularProgress />
+    </StyledDiv>
+  );
 };
 
 export default withApollo(Index);

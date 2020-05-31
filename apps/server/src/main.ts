@@ -4,7 +4,7 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import { User } from "./entity/User";
-import { RegisterUserResolver } from "./modules/user/RegisterUser";
+import { SignUpResolver } from "./modules/user/SignUp";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import cors from "cors";
@@ -38,7 +38,7 @@ const main = async () => {
       LoginResolver,
       LogoutResolver,
       MeResolver,
-      RegisterUserResolver,
+      SignUpResolver,
     ],
   });
 

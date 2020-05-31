@@ -4,7 +4,7 @@ import { IsEmailAlreadyExist } from "./isEmailAlreadyExist";
 import { User } from "../../../entity/User";
 
 @InputType()
-export class RegisterUserInput implements Partial<User> {
+export class SignUpInput implements Partial<User> {
   @Field()
   @MaxLength(30)
   @IsEmailAlreadyExist({ message: "Username is already taken!" })

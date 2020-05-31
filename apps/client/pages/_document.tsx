@@ -1,56 +1,71 @@
 import React, { ReactElement } from "react";
-import Document, { Head, Main, NextScript } from "next/document";
-import { ServerStyleSheet, css } from "styled-components";
-
-const globalStyles = css`
-  body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont;
-
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  a {
-    text-decoration: none;
-  }
-`;
+import Document, {
+  Html,
+  Head,
+  Main,
+  NextScript,
+} from "next/document";
+import { ServerStyleSheet } from "styled-components";
+import { ServerStyleSheets } from "@material-ui/core/styles";
+import theme from "../src/theme";
 
 export default class CustomDocument extends Document<{
   styleTags: ReactElement[];
 }> {
-  static getInitialProps({ renderPage }) {
-    const sheet = new ServerStyleSheet();
+  static async getInitialProps(ctx) {
+    const styledComponentsSheet = new ServerStyleSheet();
+    const materialSheets = new ServerStyleSheets();
+    const originalRenderPage = ctx.renderPage;
 
-    const page = renderPage((App) => (props) =>
-      sheet.collectStyles(<App {...props} />),
-    );
-
-    const styleTags = sheet.getStyleElement();
-
-    return { ...page, styleTags };
+    try {
+      ctx.renderPage = () =>
+        originalRenderPage({
+          enhanceApp: (App) => (props) =>
+            styledComponentsSheet.collectStyles(
+              materialSheets.collect(<App {...props} />),
+            ),
+        });
+      const initialProps = await Document.getInitialProps(ctx);
+      return {
+        ...initialProps,
+        styles: (
+          <React.Fragment>
+            {initialProps.styles}
+            {materialSheets.getStyleElement()}
+            {styledComponentsSheet.getStyleElement()}
+          </React.Fragment>
+        ),
+      };
+    } finally {
+      styledComponentsSheet.seal();
+    }
   }
 
   render() {
     return (
-      <html>
+      <Html lang="en" dir="ltr">
         <Head>
+          <meta charSet="utf-8" />
+          {/* Use minimum-scale=1 to enable GPU rasterization */}
           <meta
             name="viewport"
-            content="width=device-width, initial-scale=1"
+            content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
           />
-          <meta charSet="utf-8" />
+          {/* PWA primary color */}
+          <meta
+            name="theme-color"
+            content={theme.palette.primary.main}
+          />
           <link
             rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
-          <style type="text/css">{globalStyles}</style>
-          {this.props.styleTags}
         </Head>
         <body>
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }

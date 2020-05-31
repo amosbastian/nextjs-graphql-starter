@@ -145,9 +145,9 @@
         }
       }
     },
-    "graphql": {
-      "root": "libs/graphql",
-      "sourceRoot": "libs/graphql/src",
+    "codegen": {
+      "root": "libs/codegen",
+      "sourceRoot": "libs/codegen/src",
       "projectType": "library",
       "schematics": {},
       "architect": {
@@ -155,19 +155,19 @@
           "builder": "@nrwl/linter:lint",
           "options": {
             "linter": "eslint",
-            "config": "libs/graphql/.eslintrc",
+            "config": "libs/codegen/.eslintrc",
             "tsConfig": [
-              "libs/graphql/tsconfig.lib.json",
-              "libs/graphql/tsconfig.spec.json"
+              "libs/codegen/tsconfig.lib.json",
+              "libs/codegen/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/graphql/**"]
+            "exclude": ["**/node_modules/**", "!libs/codegen/**"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/graphql/jest.config.js",
-            "tsConfig": "libs/graphql/tsconfig.spec.json",
+            "jestConfig": "libs/codegen/jest.config.js",
+            "tsConfig": "libs/codegen/tsconfig.spec.json",
             "passWithNoTests": true
           }
         },
@@ -176,7 +176,7 @@
           "options": {
             "commands": [
               {
-                "command": "npx graphql-codegen --config libs/graphql/codegen.js"
+                "command": "npx graphql-codegen --config libs/codegen/codegen.js"
               }
             ]
           }

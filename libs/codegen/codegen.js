@@ -3,7 +3,7 @@ module.exports = {
   documents: ["apps/client/**/*.tsx", "apps/client/**/*.ts"],
   overwrite: true,
   generates: {
-    "libs/graphql/src/lib/generated/graphql.tsx": {
+    "libs/codegen/src/lib/generated/graphql.tsx": {
       plugins: [
         "typescript",
         "typescript-operations",
@@ -16,7 +16,7 @@ module.exports = {
         withComponent: false,
       },
     },
-    "libs/graphql/graphql.schema.json": {
+    "libs/codegen/graphql.schema.json": {
       plugins: ["introspection"],
     },
   },

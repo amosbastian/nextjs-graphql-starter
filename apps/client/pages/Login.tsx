@@ -27,8 +27,8 @@ const StyledMain = styled.main`
 `;
 
 const StyledDiv = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  gap: 1rem;
   padding: 1rem;
 `;
 
@@ -44,7 +44,7 @@ export const Login = () => {
         </StyledNav>
         <StyledDiv>
           <header>
-            <h1>Login to client!</h1>
+            <h1>Login to nextjs-graphql-starter!</h1>
           </header>
           <StyledMain>
             <LoginForm />

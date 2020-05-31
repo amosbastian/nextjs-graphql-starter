@@ -9,6 +9,10 @@ const globalStyles = css`
     -webkit-font-smoothing: auto;
     -moz-osx-font-smoothing: auto;
   }
+
+  a {
+    text-decoration: none;
+  }
 `;
 
 export default class CustomDocument extends Document<{

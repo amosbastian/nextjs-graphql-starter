@@ -9,7 +9,7 @@ const StyledForm = styled.form`
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: max-content;
-  gap: 0.5rem;
+  gap: 1.5rem;
 
   width: 20rem;
 `;

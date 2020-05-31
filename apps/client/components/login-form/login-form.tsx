@@ -4,6 +4,7 @@ import { useLoginMutation } from "@nextjs-graphql-starter/codegen";
 import TextInput from "../text-input/text-input";
 import { useApolloClient } from "@apollo/react-hooks";
 import { useRouter } from "next/router";
+import Button from "../button/button";
 
 const StyledForm = styled.form`
   display: grid;
@@ -58,7 +59,7 @@ export const LoginForm: React.FC = () => {
       />
       <StyledDiv>Forgot your password?</StyledDiv>
       <p>
-        <button type="submit">Login</button>
+        <Button type="submit">Login</Button>
       </p>
     </StyledForm>
   );

@@ -4,9 +4,9 @@ import styled from "styled-components";
 const StyledDiv = styled.div`
   input {
     transition: all 0.2s;
-    padding: 10px 16px;
+    padding: 0.62rem 1rem;
     outline: none;
-    border-radius: 8px;
+    border-radius: 0.5rem;
     color: #0d0c22;
     background-color: #f3f3f4;
     border: 1px solid transparent;

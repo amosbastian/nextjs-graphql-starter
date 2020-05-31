@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const StyledDiv = styled.div`
   display: grid;
-  min-height: 100vh;
+  height: 100vh;
 
   @media (min-width: 900px) {
     grid-template-columns: 20rem 1fr;
@@ -23,7 +23,7 @@ const AuthenticationLayout: React.FC = ({ children }) => {
   return (
     <StyledDiv>
       <StyledSidebarSection>Sidebar</StyledSidebarSection>
-      <div>{children}</div>
+      {children}
     </StyledDiv>
   );
 };

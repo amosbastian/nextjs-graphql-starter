@@ -36,4 +36,13 @@ TODO:
 
 ## Getting started
 
-TODO:
+1. Install packages with `yarn` or `npm`
+
+2. Either create a user called `postgres` with password `postgres` and a database called `nextjs-graphql-starter` or update the values in `@server/main` to what you have set up locally
+
+3. (Optional) install `nx` globally with `npm install -g @nrwl/cli`
+
+4. Use `nx serve server` to start the server
+
+5. Use `nx serve client` to start the client
+

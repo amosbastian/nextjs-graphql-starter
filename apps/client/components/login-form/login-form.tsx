@@ -17,7 +17,6 @@ const StyledForm = styled.form`
   grid-template-columns: 1fr;
   grid-auto-rows: max-content;
   gap: 1rem;
-  width: 20rem;
 `;
 
 const StyledSpan = styled.span`

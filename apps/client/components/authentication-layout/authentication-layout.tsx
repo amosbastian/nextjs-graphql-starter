@@ -38,9 +38,7 @@ const StyledNav = styled.nav`
 `;
 
 const StyledContentDiv = styled.div`
-  display: grid;
-  justify-content: center;
-  gap: ${({ theme }) => theme.spacing(4)}px;
+  width: 25rem;
 `;
 
 interface AuthenticationLayoutProps {

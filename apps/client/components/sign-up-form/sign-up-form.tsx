@@ -8,7 +8,6 @@ const StyledForm = styled.form`
   grid-template-columns: 1fr;
   grid-auto-rows: max-content;
   gap: 1rem;
-  width: 20rem;
 `;
 
 export const SignUpForm: React.FC = () => {

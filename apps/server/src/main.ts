@@ -3,7 +3,6 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
-import { User } from "./entity/User";
 import { SignUpResolver } from "./modules/user/SignUp";
 import session from "express-session";
 import connectRedis from "connect-redis";
@@ -15,16 +14,17 @@ import { LogoutResolver } from "./modules/user/Logout";
 import { ConfirmUserEmailResolver } from "./modules/user/ConfirmUserEmail";
 import { ForgotPasswordResolver } from "./modules/user/ForgotPassword";
 import { ChangePasswordResolver } from "./modules/user/ChangePassword";
+import { User } from "./entity/User";
 
 const main = async () => {
   await createConnection({
     name: "default",
     type: "postgres",
-    host: "localhost",
-    port: 5432,
-    username: "postgres",
-    password: "postgres",
-    database: "nextjs-graphql-starter",
+    host: process.env.DB_HOST || "localhost",
+    port: Number(process.env.DB_PORT) || 5432,
+    username: process.env.DB_USERNAME || "postgres",
+    password: process.env.DB_PASSWORD || "postgres",
+    database: process.env.DB_NAME || "nextjs-graphql-starter",
     logging: false,
     synchronize: true,
     entities: [User],
@@ -67,7 +67,7 @@ const main = async () => {
       store: new RedisStore({
         client: redis,
       }),
-      name: "qid",
+      name: process.env.SESSION_NAME || "qid",
       secret: process.env.SESSION_SECRET || "abc123",
       resave: false,
       saveUninitialized: false,

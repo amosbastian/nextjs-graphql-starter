@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-export interface ResolverContext {
+export interface CustomContext {
   req: Request;
   res: Response;
 }

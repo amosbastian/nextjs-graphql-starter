@@ -19,6 +19,7 @@ export class ConfirmUserEmailResolver {
       { id: parseInt(userId, 10) },
       { confirmedEmail: true },
     );
+
     await redis.del(confirmEmailPrefix + token);
 
     return true;

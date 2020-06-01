@@ -1,11 +1,11 @@
 import { User } from "../../entity/User";
 import { Resolver, Query, Ctx } from "type-graphql";
-import { ResolverContext } from "../../types/ResolverContext";
+import { CustomContext } from "../../types/ResolverContext";
 
 @Resolver()
 export class MeResolver {
   @Query(() => User, { nullable: true })
-  async me(@Ctx() context: ResolverContext) {
+  async me(@Ctx() context: CustomContext) {
     const userId = context.req.session.userId;
 
     if (!userId) {

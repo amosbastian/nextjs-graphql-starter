@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { gql } from "apollo-boost";
 import { ME } from "../../pages/index";
 import ProgressButton from "../progress-button/progress-button";
+import NavigationLink from "../navigation-link/navigation-link";
 
 const StyledForm = styled.form`
   display: grid;
@@ -17,6 +18,11 @@ const StyledForm = styled.form`
   grid-auto-rows: max-content;
   gap: 1rem;
   width: 20rem;
+`;
+
+const StyledSpan = styled.span`
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const LOGIN = gql`
@@ -96,6 +102,11 @@ export const LoginForm: React.FC = () => {
         autoComplete="password"
         size="small"
       />
+      <StyledSpan>
+        <NavigationLink href="reset-password">
+          Forgot password?
+        </NavigationLink>
+      </StyledSpan>
       <ProgressButton
         color="primary"
         fullWidth

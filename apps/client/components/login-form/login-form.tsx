@@ -25,8 +25,8 @@ const StyledSpan = styled.span`
 `;
 
 const LOGIN = gql`
-  mutation login($email: String!, $password: String!) {
-    login(input: { email: $email, password: $password }) {
+  mutation login($input: LoginInput!) {
+    login(input: $input) {
       id
       username
     }
@@ -36,6 +36,7 @@ const LOGIN = gql`
 export const LoginForm: React.FC = () => {
   const client = useApolloClient();
   const router = useRouter();
+
   const [login, { loading }] = useMutation<
     LoginMutation,
     LoginMutationVariables
@@ -52,6 +53,11 @@ export const LoginForm: React.FC = () => {
         },
       });
     },
+    onCompleted: (data) => {
+      if (data.login.username) {
+        router.push("/");
+      }
+    },
   });
 
   async function handleSubmit(event) {
@@ -62,16 +68,14 @@ export const LoginForm: React.FC = () => {
 
     try {
       await client.resetStore();
-      const { data } = await login({
+      await login({
         variables: {
-          email: emailElement.value,
-          password: passwordElement.value,
+          input: {
+            email: emailElement.value,
+            password: passwordElement.value,
+          },
         },
       });
-
-      if (data.login.username) {
-        await router.push("/");
-      }
     } catch (error) {
       console.log(error);
     }

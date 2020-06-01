@@ -127,7 +127,7 @@
         "description": null,
         "fields": [
           {
-            "name": "registerUser",
+            "name": "signUp",
             "description": null,
             "args": [
               {
@@ -138,7 +138,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "RegisterUserInput",
+                    "name": "SignUpInput",
                     "ofType": null
                   }
                 },
@@ -297,7 +297,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "RegisterUserInput",
+        "name": "SignUpInput",
         "description": null,
         "fields": null,
         "inputFields": [

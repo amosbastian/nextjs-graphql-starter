@@ -3,6 +3,7 @@ import styled from "styled-components";
 import useTheme from "@material-ui/core/styles/useTheme";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Sidebar from "../sidebar/sidebar";
+import Header from "../header/header";
 
 interface LayoutContainerProps {
   isDesktop: boolean;
@@ -44,6 +45,7 @@ const SiteLayout: React.FC = ({ children }) => {
 
   return (
     <LayoutContainer isDesktop={isDesktop}>
+      <Header onSidebarOpen={handleSidebarOpen} />
       <Sidebar
         onClose={handleSidebarClose}
         open={sidebarIsOpen}

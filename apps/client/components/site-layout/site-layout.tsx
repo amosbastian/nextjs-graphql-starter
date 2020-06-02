@@ -4,6 +4,7 @@ import useTheme from "@material-ui/core/styles/useTheme";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Sidebar from "../sidebar/sidebar";
 import Header from "../header/header";
+import Footer from "../footer/footer";
 
 interface LayoutContainerProps {
   isDesktop: boolean;
@@ -51,7 +52,10 @@ const SiteLayout: React.FC = ({ children }) => {
         open={sidebarIsOpen}
         variant={isDesktop ? "persistent" : "temporary"}
       />
-      <MainContainer>{children}</MainContainer>
+      <MainContainer>
+        {children}
+        <Footer />
+      </MainContainer>
     </LayoutContainer>
   );
 };

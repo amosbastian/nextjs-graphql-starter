@@ -11,6 +11,7 @@ import {
 } from "@apollo/react-hooks";
 import { useRouter } from "next/router";
 import gql from "graphql-tag";
+import SiteLayout from "../components/site-layout/site-layout";
 
 export const ME = gql`
   query me {
@@ -28,15 +29,10 @@ const LOGOUT = gql`
 `;
 
 const StyledDiv = styled.div`
-  display: grid;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-`;
-
-const StyledMain = styled.main`
-  display: grid;
-  gap: 1rem;
 `;
 
 export const Index = () => {
@@ -53,8 +49,8 @@ export const Index = () => {
 
   if (data && data.me) {
     return (
-      <StyledDiv>
-        <StyledMain>
+      <SiteLayout>
+        <StyledDiv>
           <Typography variant="h1">You are logged in!</Typography>
           <Button
             variant="contained"
@@ -64,15 +60,17 @@ export const Index = () => {
             Logout
           </Button>
           <pre>{JSON.stringify(data?.me, null, 2)}</pre>
-        </StyledMain>
-      </StyledDiv>
+        </StyledDiv>
+      </SiteLayout>
     );
   }
 
   return (
-    <StyledDiv>
-      <CircularProgress />
-    </StyledDiv>
+    <SiteLayout>
+      <StyledDiv>
+        <CircularProgress />
+      </StyledDiv>
+    </SiteLayout>
   );
 };
 

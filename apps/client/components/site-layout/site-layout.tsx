@@ -14,6 +14,8 @@ const LayoutContainer = styled.div<LayoutContainerProps>`
   padding-top: 56px;
   height: 100%;
   min-height: 100vh;
+  display: grid;
+  grid-template-rows: max-content 1fr;
 
   ${({ theme }) => theme.breakpoints.up("sm")} {
     padding-top: 64px;
@@ -22,7 +24,8 @@ const LayoutContainer = styled.div<LayoutContainerProps>`
 `;
 
 const MainContainer = styled.main`
-  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr max-content;
 `;
 
 const SiteLayout: React.FC = ({ children }) => {

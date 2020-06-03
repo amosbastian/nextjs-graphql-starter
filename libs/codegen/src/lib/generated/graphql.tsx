@@ -74,6 +74,17 @@ export type ChangePasswordInput = {
   token: Scalars['String'];
 };
 
+export type UsernameQueryVariables = {};
+
+
+export type UsernameQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username'>
+  )> }
+);
+
 export type LoginMutationVariables = {
   input: LoginInput;
 };
@@ -117,6 +128,39 @@ export type LogoutMutation = (
 );
 
 
+export const UsernameDocument = gql`
+    query username {
+  me {
+    id
+    username
+  }
+}
+    `;
+
+/**
+ * __useUsernameQuery__
+ *
+ * To run a query within a React component, call `useUsernameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUsernameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUsernameQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUsernameQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UsernameQuery, UsernameQueryVariables>) {
+        return ApolloReactHooks.useQuery<UsernameQuery, UsernameQueryVariables>(UsernameDocument, baseOptions);
+      }
+export function useUsernameLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UsernameQuery, UsernameQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<UsernameQuery, UsernameQueryVariables>(UsernameDocument, baseOptions);
+        }
+export type UsernameQueryHookResult = ReturnType<typeof useUsernameQuery>;
+export type UsernameLazyQueryHookResult = ReturnType<typeof useUsernameLazyQuery>;
+export type UsernameQueryResult = ApolloReactCommon.QueryResult<UsernameQuery, UsernameQueryVariables>;
 export const LoginDocument = gql`
     mutation login($input: LoginInput!) {
   login(input: $input) {

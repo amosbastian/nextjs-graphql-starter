@@ -20,10 +20,8 @@ const StyledSidebarSection = styled.section`
   background-position: center;
 `;
 
-// FIXME: !important
-// https://github.com/mui-org/material-ui/issues/16609
 const StyledMainSection = styled(Container)`
-  display: grid !important;
+  display: grid;
   flex-direction: column;
   justify-content: center;
   align-items: center;

@@ -7,7 +7,7 @@ import Document, {
 } from "next/document";
 import { ServerStyleSheet } from "styled-components";
 import { ServerStyleSheets } from "@material-ui/core/styles";
-import theme from "../src/theme";
+import theme from "../src/ui/theme";
 
 export default class CustomDocument extends Document<{
   styleTags: ReactElement[];

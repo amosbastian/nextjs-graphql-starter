@@ -6,7 +6,11 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import NavigationLink from "../navigation-link/navigation-link";
 import { gql } from "apollo-boost";
-import { useQuery } from "@apollo/react-hooks";
+import {
+  useQuery,
+  useApolloClient,
+  useMutation,
+} from "@apollo/react-hooks";
 import { UsernameQuery } from "@nextjs-graphql-starter/codegen";
 
 const StyledAvatar = styled(Avatar)`
@@ -27,6 +31,12 @@ const StyledButton = styled(Button)`
   }
 `;
 
+const LOGOUT = gql`
+  mutation logout {
+    logout
+  }
+`;
+
 const USERNAME = gql`
   query username {
     me {
@@ -41,6 +51,10 @@ export const HeaderAvatar = () => {
     null,
   );
 
+  const client = useApolloClient();
+  const [logout] = useMutation(LOGOUT, {
+    onCompleted: () => client.resetStore(),
+  });
   const { data } = useQuery<UsernameQuery>(USERNAME);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -51,6 +65,10 @@ export const HeaderAvatar = () => {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <div>
       <StyledButton
@@ -59,7 +77,7 @@ export const HeaderAvatar = () => {
         onClick={handleClick}
       >
         <StyledAvatar alt="Amos Bastian" />
-        {data?.me.username}
+        {data?.me?.username}
       </StyledButton>
       <Menu
         anchorEl={anchorEl}
@@ -86,7 +104,7 @@ export const HeaderAvatar = () => {
             Account
           </NavigationLink>
         </MenuItem>
-        <MenuItem>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </div>
   );

@@ -4,6 +4,7 @@ import useTheme from "@material-ui/core/styles/useTheme";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Header from "../header/header";
 import Footer from "../footer/footer";
+import Container from "@material-ui/core/Container";
 
 interface LayoutContainerProps {
   isDesktop: boolean;
@@ -20,10 +21,10 @@ const LayoutContainer = styled.div<LayoutContainerProps>`
   }
 `;
 
-const MainContainer = styled.main`
+const MainContainer = styled(Container)`
   display: grid;
   grid-template-rows: 1fr max-content;
-`;
+` as typeof Container;
 
 const SiteLayout: React.FC = ({ children }) => {
   const theme = useTheme();
@@ -35,7 +36,7 @@ const SiteLayout: React.FC = ({ children }) => {
   return (
     <LayoutContainer isDesktop={isDesktop}>
       <Header />
-      <MainContainer>
+      <MainContainer component="main" maxWidth="md">
         {children}
         <Footer />
       </MainContainer>

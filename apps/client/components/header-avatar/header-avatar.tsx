@@ -4,6 +4,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import NavigationLink from "../navigation-link/navigation-link";
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
 import { UsernameQuery } from "@nextjs-graphql-starter/codegen";
@@ -76,8 +77,15 @@ export const HeaderAvatar = () => {
           horizontal: "center",
         }}
       >
-        <MenuItem>Settings</MenuItem>
-        <MenuItem>Account</MenuItem>
+        <MenuItem>
+          <NavigationLink
+            color="textPrimary"
+            href="account"
+            underline="none"
+          >
+            Account
+          </NavigationLink>
+        </MenuItem>
         <MenuItem>Logout</MenuItem>
       </Menu>
     </div>

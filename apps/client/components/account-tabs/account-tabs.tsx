@@ -12,7 +12,7 @@ function a11yProps(index: number) {
 // FIXME: can't extend TabsProps https://github.com/mui-org/material-ui/issues/17454
 interface AccountTabsProps {
   onChange: (event: React.ChangeEvent<{}>, newValue: number) => void;
-  value: any;
+  value: number;
 }
 
 export const AccountTabs: React.FC<AccountTabsProps> = ({

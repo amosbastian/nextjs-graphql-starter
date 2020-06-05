@@ -36,7 +36,7 @@ const SiteLayout: React.FC = ({ children }) => {
   return (
     <LayoutContainer isDesktop={isDesktop}>
       <Header />
-      <MainContainer component="main" maxWidth="md">
+      <MainContainer component="main" maxWidth="lg">
         {children}
       </MainContainer>
       <Footer />

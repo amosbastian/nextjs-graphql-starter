@@ -12,11 +12,11 @@ const StyledDiv = styled.div`
   grid-template-columns: 1fr;
   gap: ${({ theme }) => theme.spacing(4)}px;
 
-  ${({ theme }) => theme.breakpoints.up("sm")} {
+  ${({ theme }) => theme.breakpoints.up("md")} {
     grid-template-columns: 1fr 1fr;
   }
 
-  ${({ theme }) => theme.breakpoints.up("md")} {
+  ${({ theme }) => theme.breakpoints.up("lg")} {
     grid-template-columns: 2fr 3fr;
   }
 `;

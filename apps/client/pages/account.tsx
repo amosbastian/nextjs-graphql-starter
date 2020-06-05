@@ -3,7 +3,7 @@ import SiteLayout from "../components/site-layout/site-layout";
 import withApollo from "../apollo/withApollo";
 import AccountTabs from "../components/account-tabs/account-tabs";
 import AccountTabPanel from "../components/account-tab-panel/account-tab-panel";
-import AccountGeneral from "../components/account-general/account-general";
+import AccountGeneralSettings from "../components/account-general-settings/account-general-settings";
 import AccountSecurity from "../components/account-security/account-security";
 
 /* eslint-disable-next-line */
@@ -23,7 +23,7 @@ export const Account: React.FC<AccountProps> = () => {
     <SiteLayout>
       <AccountTabs onChange={handleChange} value={value} />
       <AccountTabPanel value={value} index={0}>
-        <AccountGeneral />
+        <AccountGeneralSettings />
       </AccountTabPanel>
       <AccountTabPanel value={value} index={1}>
         <AccountSecurity />

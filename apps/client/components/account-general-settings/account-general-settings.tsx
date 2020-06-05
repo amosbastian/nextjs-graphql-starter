@@ -1,8 +1,8 @@
 import React from "react";
 
 import styled from "styled-components";
-import Paper from "@material-ui/core/Paper";
 import AccountGeneralSettingsForm from "./account-general-settings-form/account-general-settings-form";
+import AccountProfilePictureForm from "./account-profile-picture-form/account-profile-picture-form";
 
 /* eslint-disable-next-line */
 export interface AccountGeneralSettingsProps {}
@@ -25,7 +25,7 @@ export const AccountGeneralSettings: React.FC<AccountGeneralSettingsProps> = () 
   return (
     <StyledDiv>
       <div>
-        <Paper variant="outlined">Profile picture</Paper>
+        <AccountProfilePictureForm />
       </div>
       <div>
         <AccountGeneralSettingsForm />

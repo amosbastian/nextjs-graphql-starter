@@ -22,6 +22,7 @@ const StyledDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 100vh;
 `;
 
 export const Index = () => {
@@ -35,20 +36,16 @@ export const Index = () => {
   if (data && data.me) {
     return (
       <SiteLayout>
-        <StyledDiv>
-          <Typography variant="h1">You are logged in!</Typography>
-          <pre>{JSON.stringify(data?.me, null, 2)}</pre>
-        </StyledDiv>
+        <Typography variant="h1">You are logged in!</Typography>
+        <pre>{JSON.stringify(data?.me, null, 2)}</pre>
       </SiteLayout>
     );
   }
 
   return (
-    <SiteLayout>
-      <StyledDiv>
-        <CircularProgress />
-      </StyledDiv>
-    </SiteLayout>
+    <StyledDiv>
+      <CircularProgress />
+    </StyledDiv>
   );
 };
 

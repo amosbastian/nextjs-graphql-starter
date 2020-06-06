@@ -12,6 +12,7 @@ import {
   useMutation,
 } from "@apollo/react-hooks";
 import { UsernameQuery } from "@nextjs-graphql-starter/codegen";
+import { useRouter } from "next/router";
 
 const StyledAvatar = styled(Avatar)`
   &.MuiAvatar-root {
@@ -45,13 +46,17 @@ const USERNAME = gql`
 `;
 
 export const HeaderAvatar = () => {
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(
     null,
   );
 
   const client = useApolloClient();
   const [logout] = useMutation(LOGOUT, {
-    onCompleted: () => client.resetStore(),
+    onCompleted: () => {
+      client.resetStore();
+      router.push("/login");
+    },
   });
   const { data } = useQuery<UsernameQuery>(USERNAME);
 

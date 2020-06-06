@@ -62,7 +62,7 @@ export type MutationChangePasswordArgs = {
 
 export type MutationUpdateUserArgs = {
   input: UpdateUserInput;
-  id: Scalars['ID'];
+  id?: Maybe<Scalars['ID']>;
 };
 
 export type SignUpInput = {
@@ -122,6 +122,19 @@ export type AccountGeneralSettingsUserQuery = (
 export type AccountProfilePictureFormUserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'username'>
+);
+
+export type UpdateUserPasswordMutationVariables = {
+  input: UpdateUserInput;
+};
+
+
+export type UpdateUserPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser: (
+    { __typename?: 'User' }
+    & Pick<User, 'id'>
+  ) }
 );
 
 export type LogoutMutationVariables = {};
@@ -259,6 +272,38 @@ export function useAccountGeneralSettingsUserLazyQuery(baseOptions?: ApolloReact
 export type AccountGeneralSettingsUserQueryHookResult = ReturnType<typeof useAccountGeneralSettingsUserQuery>;
 export type AccountGeneralSettingsUserLazyQueryHookResult = ReturnType<typeof useAccountGeneralSettingsUserLazyQuery>;
 export type AccountGeneralSettingsUserQueryResult = ApolloReactCommon.QueryResult<AccountGeneralSettingsUserQuery, AccountGeneralSettingsUserQueryVariables>;
+export const UpdateUserPasswordDocument = gql`
+    mutation updateUserPassword($input: UpdateUserInput!) {
+  updateUser(input: $input) {
+    id
+  }
+}
+    `;
+export type UpdateUserPasswordMutationFn = ApolloReactCommon.MutationFunction<UpdateUserPasswordMutation, UpdateUserPasswordMutationVariables>;
+
+/**
+ * __useUpdateUserPasswordMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserPasswordMutation, { data, loading, error }] = useUpdateUserPasswordMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateUserPasswordMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateUserPasswordMutation, UpdateUserPasswordMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateUserPasswordMutation, UpdateUserPasswordMutationVariables>(UpdateUserPasswordDocument, baseOptions);
+      }
+export type UpdateUserPasswordMutationHookResult = ReturnType<typeof useUpdateUserPasswordMutation>;
+export type UpdateUserPasswordMutationResult = ApolloReactCommon.MutationResult<UpdateUserPasswordMutation>;
+export type UpdateUserPasswordMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateUserPasswordMutation, UpdateUserPasswordMutationVariables>;
 export const LogoutDocument = gql`
     mutation logout {
   logout

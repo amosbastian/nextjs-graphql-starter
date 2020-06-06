@@ -1,15 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import AccountGeneralSettingsForm, {
-  ACCOUNT_GENERAL_SETTINGS_FORM_FRAGMENT,
+  ACCOUNT_GENERAL_SETTINGS_FORM_USER_FRAGMENT,
 } from "./account-general-settings-form/account-general-settings-form";
-import AccountProfilePictureForm from "./account-profile-picture-form/account-profile-picture-form";
+import AccountProfilePictureForm, {
+  ACCOUNT_PROFILE_PICTURE_FORM_USER_FRAGMENT,
+} from "./account-profile-picture-form/account-profile-picture-form";
 import { gql } from "apollo-boost";
 import { useQuery } from "@apollo/react-hooks";
-import { AccountGeneralSettingsQuery } from "@nextjs-graphql-starter/codegen";
-
-/* eslint-disable-next-line */
-export interface AccountGeneralSettingsProps {}
+import { AccountGeneralSettingsUserQuery } from "@nextjs-graphql-starter/codegen";
 
 const StyledDiv = styled.div`
   display: grid;
@@ -25,19 +24,21 @@ const StyledDiv = styled.div`
   }
 `;
 
-const ACCOUNT_GENERAL_SETTINGS_QUERY = gql`
-  query accountGeneralSettings {
+const ACCOUNT_GENERAL_SETTINGS_USER_QUERY = gql`
+  query accountGeneralSettingsUser {
     me {
       id
-      ...accountGeneralSettingsForm
+      ...accountProfilePictureFormUser
+      ...accountGeneralSettingsFormUser
     }
   }
-  ${ACCOUNT_GENERAL_SETTINGS_FORM_FRAGMENT}
+  ${ACCOUNT_PROFILE_PICTURE_FORM_USER_FRAGMENT}
+  ${ACCOUNT_GENERAL_SETTINGS_FORM_USER_FRAGMENT}
 `;
 
-export const AccountGeneralSettings: React.FC<AccountGeneralSettingsProps> = () => {
-  const { data, loading } = useQuery<AccountGeneralSettingsQuery>(
-    ACCOUNT_GENERAL_SETTINGS_QUERY,
+export const AccountGeneralSettings: React.FC = () => {
+  const { data, loading } = useQuery<AccountGeneralSettingsUserQuery>(
+    ACCOUNT_GENERAL_SETTINGS_USER_QUERY,
   );
 
   if (loading) return <div>Loading...</div>;
@@ -47,10 +48,10 @@ export const AccountGeneralSettings: React.FC<AccountGeneralSettingsProps> = () 
   return (
     <StyledDiv>
       <div>
-        <AccountProfilePictureForm />
+        <AccountProfilePictureForm user={me} />
       </div>
       <div>
-        <AccountGeneralSettingsForm me={me} />
+        <AccountGeneralSettingsForm user={me} />
       </div>
     </StyledDiv>
   );

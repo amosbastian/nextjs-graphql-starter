@@ -6,6 +6,8 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Typography from "@material-ui/core/Typography";
 import styled from "styled-components";
+import { gql } from "apollo-boost";
+import { AccountProfilePictureFormUserFragment } from "@nextjs-graphql-starter/codegen";
 
 const StyledAvatar = styled(Avatar)`
   height: 100px;
@@ -24,15 +26,26 @@ const StyledCardContent = styled(CardContent)`
   align-items: center;
 `;
 
-/* eslint-disable-next-line */
-export interface AccountProfilePictureFormProps {}
+export const ACCOUNT_PROFILE_PICTURE_FORM_USER_FRAGMENT = gql`
+  fragment accountProfilePictureFormUser on User {
+    username
+  }
+`;
 
-export const AccountProfilePictureForm: React.FC<AccountProfilePictureFormProps> = () => {
+export interface AccountProfilePictureFormProps {
+  user: AccountProfilePictureFormUserFragment;
+}
+
+export const AccountProfilePictureForm: React.FC<AccountProfilePictureFormProps> = ({
+  user,
+}) => {
+  const { username } = user;
+
   return (
     <Card variant="outlined" component="form">
       <StyledCardContent>
         <StyledAvatar alt="Username" />
-        <Typography align="center">Username</Typography>
+        <Typography align="center">{username}</Typography>
       </StyledCardContent>
       <CardActions>
         <StyledButton variant="text">Edit picture</StyledButton>

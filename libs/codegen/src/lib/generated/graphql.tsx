@@ -74,20 +74,27 @@ export type ChangePasswordInput = {
   token: Scalars['String'];
 };
 
-export type AccountGeneralSettingsFormFragment = (
+export type AccountGeneralSettingsFormUserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'username' | 'email'>
 );
 
-export type AccountGeneralSettingsQueryVariables = {};
+export type AccountGeneralSettingsUserQueryVariables = {};
 
 
-export type AccountGeneralSettingsQuery = (
+export type AccountGeneralSettingsUserQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & AccountGeneralSettingsFormFragment
+    & Pick<User, 'id'>
+    & AccountProfilePictureFormUserFragment
+    & AccountGeneralSettingsFormUserFragment
   )> }
+);
+
+export type AccountProfilePictureFormUserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'username'>
 );
 
 export type LogoutMutationVariables = {};
@@ -143,44 +150,52 @@ export type MeQuery = (
   )> }
 );
 
-export const AccountGeneralSettingsFormFragmentDoc = gql`
-    fragment accountGeneralSettingsForm on User {
+export const AccountGeneralSettingsFormUserFragmentDoc = gql`
+    fragment accountGeneralSettingsFormUser on User {
   username
   email
 }
     `;
-export const AccountGeneralSettingsDocument = gql`
-    query accountGeneralSettings {
+export const AccountProfilePictureFormUserFragmentDoc = gql`
+    fragment accountProfilePictureFormUser on User {
+  username
+}
+    `;
+export const AccountGeneralSettingsUserDocument = gql`
+    query accountGeneralSettingsUser {
   me {
-    ...accountGeneralSettingsForm
+    id
+    ...accountProfilePictureFormUser
+    ...accountGeneralSettingsFormUser
   }
 }
-    ${AccountGeneralSettingsFormFragmentDoc}`;
+    ${AccountProfilePictureFormUserFragmentDoc}
+${AccountGeneralSettingsFormUserFragmentDoc}`;
 
 /**
- * __useAccountGeneralSettingsQuery__
+ * __useAccountGeneralSettingsUserQuery__
  *
- * To run a query within a React component, call `useAccountGeneralSettingsQuery` and pass it any options that fit your needs.
- * When your component renders, `useAccountGeneralSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useAccountGeneralSettingsUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccountGeneralSettingsUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useAccountGeneralSettingsQuery({
+ * const { data, loading, error } = useAccountGeneralSettingsUserQuery({
  *   variables: {
  *   },
  * });
  */
-export function useAccountGeneralSettingsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AccountGeneralSettingsQuery, AccountGeneralSettingsQueryVariables>) {
-        return ApolloReactHooks.useQuery<AccountGeneralSettingsQuery, AccountGeneralSettingsQueryVariables>(AccountGeneralSettingsDocument, baseOptions);
+export function useAccountGeneralSettingsUserQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AccountGeneralSettingsUserQuery, AccountGeneralSettingsUserQueryVariables>) {
+        return ApolloReactHooks.useQuery<AccountGeneralSettingsUserQuery, AccountGeneralSettingsUserQueryVariables>(AccountGeneralSettingsUserDocument, baseOptions);
       }
-export function useAccountGeneralSettingsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AccountGeneralSettingsQuery, AccountGeneralSettingsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<AccountGeneralSettingsQuery, AccountGeneralSettingsQueryVariables>(AccountGeneralSettingsDocument, baseOptions);
+export function useAccountGeneralSettingsUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AccountGeneralSettingsUserQuery, AccountGeneralSettingsUserQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<AccountGeneralSettingsUserQuery, AccountGeneralSettingsUserQueryVariables>(AccountGeneralSettingsUserDocument, baseOptions);
         }
-export type AccountGeneralSettingsQueryHookResult = ReturnType<typeof useAccountGeneralSettingsQuery>;
-export type AccountGeneralSettingsLazyQueryHookResult = ReturnType<typeof useAccountGeneralSettingsLazyQuery>;
-export type AccountGeneralSettingsQueryResult = ApolloReactCommon.QueryResult<AccountGeneralSettingsQuery, AccountGeneralSettingsQueryVariables>;
+export type AccountGeneralSettingsUserQueryHookResult = ReturnType<typeof useAccountGeneralSettingsUserQuery>;
+export type AccountGeneralSettingsUserLazyQueryHookResult = ReturnType<typeof useAccountGeneralSettingsUserLazyQuery>;
+export type AccountGeneralSettingsUserQueryResult = ApolloReactCommon.QueryResult<AccountGeneralSettingsUserQuery, AccountGeneralSettingsUserQueryVariables>;
 export const LogoutDocument = gql`
     mutation logout {
   logout

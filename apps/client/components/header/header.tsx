@@ -2,11 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
+import NavigationLink from "../navigation-link/navigation-link";
 import HeaderAvatar from "../header-avatar/header-avatar";
 
 const StyledAppBar = styled(AppBar)`
   box-shadow: none;
+  background-color: transparent;
 `;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -16,7 +17,7 @@ const Header: React.FC<HeaderProps> = () => {
   return (
     <StyledAppBar>
       <Toolbar>
-        <Typography variant="h6">nextjs-graphql-starter</Typography>
+        <NavigationLink href="/">Home</NavigationLink>
         <div style={{ flexGrow: 1 }} />
         <HeaderAvatar />
       </Toolbar>

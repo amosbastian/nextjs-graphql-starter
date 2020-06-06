@@ -21,8 +21,6 @@ const StyledAvatar = styled(Avatar)`
 `;
 
 const StyledButton = styled(Button)`
-  color: white;
-
   span.MuiButton-label {
     text-transform: none;
     display: grid;

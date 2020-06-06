@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -34,10 +34,29 @@ export interface AccountGeneralSettingsFormProps {
 export const AccountGeneralSettingsForm: React.FC<AccountGeneralSettingsFormProps> = ({
   user,
 }) => {
-  const { username, email } = user;
+  const [username, setUsername] = useState(user.username);
+  const [email, setEmail] = useState(user.email);
+
+  const handleUsernameChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setUsername(event.target.value);
+  };
+
+  const handleEmailChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setEmail(event.target.value);
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLDivElement>) => {
+    event.preventDefault();
+
+    console.log(username, email);
+  };
 
   return (
-    <Card variant="outlined" component="form">
+    <Card variant="outlined" component="form" onSubmit={handleSubmit}>
       <CardHeader title="Profile" />
       <Divider />
       <StyledCardContent>
@@ -45,11 +64,13 @@ export const AccountGeneralSettingsForm: React.FC<AccountGeneralSettingsFormProp
           label="Username"
           variant="outlined"
           value={username}
+          onChange={handleUsernameChange}
         />
         <TextField
           label="Email Address"
           variant="outlined"
           value={email}
+          onChange={handleEmailChange}
         />
       </StyledCardContent>
       <Divider />

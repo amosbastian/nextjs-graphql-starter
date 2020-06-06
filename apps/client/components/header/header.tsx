@@ -10,14 +10,13 @@ const StyledAppBar = styled(AppBar)`
   background-color: transparent;
 `;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface HeaderProps {}
-
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC = () => {
   return (
     <StyledAppBar>
       <Toolbar>
-        <NavigationLink href="/">Home</NavigationLink>
+        <NavigationLink href="/" underline="none">
+          Home
+        </NavigationLink>
         <div style={{ flexGrow: 1 }} />
         <HeaderAvatar />
       </Toolbar>

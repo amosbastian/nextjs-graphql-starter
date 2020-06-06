@@ -4,7 +4,7 @@ import {
   Arg,
   InputType,
   Field,
-  Int,
+  ID,
 } from "type-graphql";
 import { User } from "../../entity/User";
 import bcrypt from "bcryptjs";
@@ -25,7 +25,7 @@ class UpdateUserInput {
 export class UpdateUserResolver {
   @Mutation(() => User)
   async updateUser(
-    @Arg("id", () => Int) id: number,
+    @Arg("id", () => ID) id: number,
     @Arg("input") input: UpdateUserInput,
   ): Promise<User> {
     if (input.password) {

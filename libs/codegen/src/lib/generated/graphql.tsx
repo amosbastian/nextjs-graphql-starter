@@ -31,6 +31,7 @@ export type Mutation = {
   confirmUserEmail: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   changePassword?: Maybe<User>;
+  updateUser: User;
 };
 
 
@@ -58,6 +59,12 @@ export type MutationChangePasswordArgs = {
   input: ChangePasswordInput;
 };
 
+
+export type MutationUpdateUserArgs = {
+  input: UpdateUserInput;
+  id: Scalars['ID'];
+};
+
 export type SignUpInput = {
   username: Scalars['String'];
   email: Scalars['String'];
@@ -74,9 +81,29 @@ export type ChangePasswordInput = {
   token: Scalars['String'];
 };
 
+export type UpdateUserInput = {
+  username?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+};
+
 export type AccountGeneralSettingsFormUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'username' | 'email'>
+  & Pick<User, 'id' | 'username' | 'email'>
+);
+
+export type UpdateUserAccountSettingsMutationVariables = {
+  id: Scalars['ID'];
+  input: UpdateUserInput;
+};
+
+
+export type UpdateUserAccountSettingsMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'email' | 'username'>
+  ) }
 );
 
 export type AccountGeneralSettingsUserQueryVariables = {};
@@ -152,6 +179,7 @@ export type MeQuery = (
 
 export const AccountGeneralSettingsFormUserFragmentDoc = gql`
     fragment accountGeneralSettingsFormUser on User {
+  id
   username
   email
 }
@@ -161,6 +189,41 @@ export const AccountProfilePictureFormUserFragmentDoc = gql`
   username
 }
     `;
+export const UpdateUserAccountSettingsDocument = gql`
+    mutation updateUserAccountSettings($id: ID!, $input: UpdateUserInput!) {
+  updateUser(id: $id, input: $input) {
+    id
+    email
+    username
+  }
+}
+    `;
+export type UpdateUserAccountSettingsMutationFn = ApolloReactCommon.MutationFunction<UpdateUserAccountSettingsMutation, UpdateUserAccountSettingsMutationVariables>;
+
+/**
+ * __useUpdateUserAccountSettingsMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserAccountSettingsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserAccountSettingsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserAccountSettingsMutation, { data, loading, error }] = useUpdateUserAccountSettingsMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateUserAccountSettingsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateUserAccountSettingsMutation, UpdateUserAccountSettingsMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateUserAccountSettingsMutation, UpdateUserAccountSettingsMutationVariables>(UpdateUserAccountSettingsDocument, baseOptions);
+      }
+export type UpdateUserAccountSettingsMutationHookResult = ReturnType<typeof useUpdateUserAccountSettingsMutation>;
+export type UpdateUserAccountSettingsMutationResult = ApolloReactCommon.MutationResult<UpdateUserAccountSettingsMutation>;
+export type UpdateUserAccountSettingsMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateUserAccountSettingsMutation, UpdateUserAccountSettingsMutationVariables>;
 export const AccountGeneralSettingsUserDocument = gql`
     query accountGeneralSettingsUser {
   me {

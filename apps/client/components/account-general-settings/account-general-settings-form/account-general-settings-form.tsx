@@ -8,7 +8,13 @@ import Divider from "@material-ui/core/Divider";
 import styled from "styled-components";
 import TextField from "@material-ui/core/TextField";
 import { gql } from "apollo-boost";
-import { AccountGeneralSettingsFormUserFragment } from "@nextjs-graphql-starter/codegen";
+import {
+  AccountGeneralSettingsFormUserFragment,
+  UpdateUserAccountSettingsMutation,
+  UpdateUserAccountSettingsMutationVariables,
+} from "@nextjs-graphql-starter/codegen";
+import { useMutation } from "@apollo/react-hooks";
+import ProgressButton from "../../progress-button/progress-button";
 
 const StyledCardActions = styled(CardActions)`
   justify-content: flex-end;
@@ -22,8 +28,22 @@ const StyledCardContent = styled(CardContent)`
 
 export const ACCOUNT_GENERAL_SETTINGS_FORM_USER_FRAGMENT = gql`
   fragment accountGeneralSettingsFormUser on User {
+    id
     username
     email
+  }
+`;
+
+const UPDATE_USER_ACCOUNT_SETTINGS = gql`
+  mutation updateUserAccountSettings(
+    $id: ID!
+    $input: UpdateUserInput!
+  ) {
+    updateUser(id: $id, input: $input) {
+      id
+      email
+      username
+    }
   }
 `;
 
@@ -36,6 +56,11 @@ export const AccountGeneralSettingsForm: React.FC<AccountGeneralSettingsFormProp
 }) => {
   const [username, setUsername] = useState(user.username);
   const [email, setEmail] = useState(user.email);
+
+  const [updateUser, { loading }] = useMutation<
+    UpdateUserAccountSettingsMutation,
+    UpdateUserAccountSettingsMutationVariables
+  >(UPDATE_USER_ACCOUNT_SETTINGS);
 
   const handleUsernameChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -52,7 +77,15 @@ export const AccountGeneralSettingsForm: React.FC<AccountGeneralSettingsFormProp
   const handleSubmit = (event: React.FormEvent<HTMLDivElement>) => {
     event.preventDefault();
 
-    console.log(username, email);
+    updateUser({
+      variables: {
+        id: user.id,
+        input: {
+          email,
+          username,
+        },
+      },
+    });
   };
 
   return (
@@ -75,9 +108,14 @@ export const AccountGeneralSettingsForm: React.FC<AccountGeneralSettingsFormProp
       </StyledCardContent>
       <Divider />
       <StyledCardActions>
-        <Button color="primary" variant="contained" type="submit">
+        <ProgressButton
+          color="primary"
+          loading={loading}
+          variant="contained"
+          type="submit"
+        >
           Save changes
-        </Button>
+        </ProgressButton>
       </StyledCardActions>
     </Card>
   );

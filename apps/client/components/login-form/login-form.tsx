@@ -8,9 +8,9 @@ import {
 import { useApolloClient, useMutation } from "@apollo/react-hooks";
 import { useRouter } from "next/router";
 import { gql } from "apollo-boost";
-import { ME } from "../../pages/index";
 import ProgressButton from "../progress-button/progress-button";
 import NavigationLink from "../navigation-link/navigation-link";
+import { USER_LOGGED_IN } from "apps/client/hooks/use-user";
 
 const StyledForm = styled.form`
   display: grid;
@@ -47,7 +47,7 @@ export const LoginForm: React.FC = () => {
       }
 
       cache.writeQuery({
-        query: ME,
+        query: USER_LOGGED_IN,
         data: {
           me: data.login,
         },

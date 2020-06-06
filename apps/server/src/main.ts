@@ -15,6 +15,7 @@ import { ConfirmUserEmailResolver } from "./modules/user/ConfirmUserEmail";
 import { ForgotPasswordResolver } from "./modules/user/ForgotPassword";
 import { ChangePasswordResolver } from "./modules/user/ChangePassword";
 import { User } from "./entity/User";
+import { UpdateUserResolver } from "./modules/user/Update";
 
 const main = async () => {
   await createConnection({
@@ -39,6 +40,7 @@ const main = async () => {
       LogoutResolver,
       MeResolver,
       SignUpResolver,
+      UpdateUserResolver,
     ],
   });
 

@@ -1,18 +1,9 @@
 import React from "react";
-import styled from "styled-components";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import withApollo from "../apollo/withApollo";
 import SiteLayout from "../components/site-layout/site-layout";
 import useUser from "../hooks/use-user";
-
-const StyledDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-`;
+import LoadingPage from "../components/loading-page/loading-page";
 
 export const Index = () => {
   const { data } = useUser();
@@ -26,11 +17,7 @@ export const Index = () => {
     );
   }
 
-  return (
-    <StyledDiv>
-      <CircularProgress />
-    </StyledDiv>
-  );
+  return <LoadingPage />;
 };
 
 export default withApollo(Index);

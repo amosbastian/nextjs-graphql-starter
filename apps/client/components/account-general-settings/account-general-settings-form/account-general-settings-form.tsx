@@ -7,9 +7,8 @@ import CardActions from "@material-ui/core/CardActions";
 import Divider from "@material-ui/core/Divider";
 import styled from "styled-components";
 import TextField from "@material-ui/core/TextField";
-
-/* eslint-disable-next-line */
-export interface AccountGeneralSettingsFormProps {}
+import { gql } from "apollo-boost";
+import { AccountGeneralSettingsFormFragment } from "@nextjs-graphql-starter/codegen";
 
 const StyledCardActions = styled(CardActions)`
   justify-content: flex-end;
@@ -21,14 +20,37 @@ const StyledCardContent = styled(CardContent)`
   gap: ${({ theme }) => theme.spacing(2)}px;
 `;
 
-export const AccountGeneralSettingsForm: React.FC<AccountGeneralSettingsFormProps> = () => {
+export const ACCOUNT_GENERAL_SETTINGS_FORM_FRAGMENT = gql`
+  fragment accountGeneralSettingsForm on User {
+    username
+    email
+  }
+`;
+
+export interface AccountGeneralSettingsFormProps {
+  me: AccountGeneralSettingsFormFragment;
+}
+
+export const AccountGeneralSettingsForm: React.FC<AccountGeneralSettingsFormProps> = ({
+  me,
+}) => {
+  const { username, email } = me;
+
   return (
     <Card variant="outlined" component="form">
       <CardHeader title="Profile" />
       <Divider />
       <StyledCardContent>
-        <TextField label="Username" variant="outlined" />
-        <TextField label="Email Address" variant="outlined" />
+        <TextField
+          label="Username"
+          variant="outlined"
+          value={username}
+        />
+        <TextField
+          label="Email Address"
+          variant="outlined"
+          value={email}
+        />
       </StyledCardContent>
       <Divider />
       <StyledCardActions>

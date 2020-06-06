@@ -74,6 +74,30 @@ export type ChangePasswordInput = {
   token: Scalars['String'];
 };
 
+export type AccountGeneralSettingsFormFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'username' | 'email'>
+);
+
+export type AccountGeneralSettingsQueryVariables = {};
+
+
+export type AccountGeneralSettingsQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & AccountGeneralSettingsFormFragment
+  )> }
+);
+
+export type LogoutMutationVariables = {};
+
+
+export type LogoutMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'logout'>
+);
+
 export type UsernameQueryVariables = {};
 
 
@@ -119,15 +143,73 @@ export type MeQuery = (
   )> }
 );
 
-export type LogoutMutationVariables = {};
+export const AccountGeneralSettingsFormFragmentDoc = gql`
+    fragment accountGeneralSettingsForm on User {
+  username
+  email
+}
+    `;
+export const AccountGeneralSettingsDocument = gql`
+    query accountGeneralSettings {
+  me {
+    ...accountGeneralSettingsForm
+  }
+}
+    ${AccountGeneralSettingsFormFragmentDoc}`;
 
+/**
+ * __useAccountGeneralSettingsQuery__
+ *
+ * To run a query within a React component, call `useAccountGeneralSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccountGeneralSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccountGeneralSettingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAccountGeneralSettingsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AccountGeneralSettingsQuery, AccountGeneralSettingsQueryVariables>) {
+        return ApolloReactHooks.useQuery<AccountGeneralSettingsQuery, AccountGeneralSettingsQueryVariables>(AccountGeneralSettingsDocument, baseOptions);
+      }
+export function useAccountGeneralSettingsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AccountGeneralSettingsQuery, AccountGeneralSettingsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<AccountGeneralSettingsQuery, AccountGeneralSettingsQueryVariables>(AccountGeneralSettingsDocument, baseOptions);
+        }
+export type AccountGeneralSettingsQueryHookResult = ReturnType<typeof useAccountGeneralSettingsQuery>;
+export type AccountGeneralSettingsLazyQueryHookResult = ReturnType<typeof useAccountGeneralSettingsLazyQuery>;
+export type AccountGeneralSettingsQueryResult = ApolloReactCommon.QueryResult<AccountGeneralSettingsQuery, AccountGeneralSettingsQueryVariables>;
+export const LogoutDocument = gql`
+    mutation logout {
+  logout
+}
+    `;
+export type LogoutMutationFn = ApolloReactCommon.MutationFunction<LogoutMutation, LogoutMutationVariables>;
 
-export type LogoutMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'logout'>
-);
-
-
+/**
+ * __useLogoutMutation__
+ *
+ * To run a mutation, you first call `useLogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [logoutMutation, { data, loading, error }] = useLogoutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLogoutMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
+        return ApolloReactHooks.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, baseOptions);
+      }
+export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
+export type LogoutMutationResult = ApolloReactCommon.MutationResult<LogoutMutation>;
+export type LogoutMutationOptions = ApolloReactCommon.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const UsernameDocument = gql`
     query username {
   me {
@@ -257,32 +339,3 @@ export function useMeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptio
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = ApolloReactCommon.QueryResult<MeQuery, MeQueryVariables>;
-export const LogoutDocument = gql`
-    mutation logout {
-  logout
-}
-    `;
-export type LogoutMutationFn = ApolloReactCommon.MutationFunction<LogoutMutation, LogoutMutationVariables>;
-
-/**
- * __useLogoutMutation__
- *
- * To run a mutation, you first call `useLogoutMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLogoutMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [logoutMutation, { data, loading, error }] = useLogoutMutation({
- *   variables: {
- *   },
- * });
- */
-export function useLogoutMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
-        return ApolloReactHooks.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, baseOptions);
-      }
-export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
-export type LogoutMutationResult = ApolloReactCommon.MutationResult<LogoutMutation>;
-export type LogoutMutationOptions = ApolloReactCommon.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;

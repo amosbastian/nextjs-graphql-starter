@@ -4,7 +4,13 @@ import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Divider from "@material-ui/core/Divider";
-import TextField from "@material-ui/core/TextField";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import InputLabel from "@material-ui/core/InputLabel";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import FormControl from "@material-ui/core/FormControl";
+import Visibility from "@material-ui/icons/Visibility";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import IconButton from "@material-ui/core/IconButton";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { useMutation } from "@apollo/react-hooks";
@@ -13,9 +19,6 @@ import {
   UpdateUserPasswordMutation,
   UpdateUserPasswordMutationVariables,
 } from "@nextjs-graphql-starter/codegen";
-
-/* eslint-disable-next-line */
-export interface AccountSecurityFormProps {}
 
 const StyledCardActions = styled(CardActions)`
   justify-content: flex-end;
@@ -43,29 +46,50 @@ const UPDATE_USER_PASSWORD = gql`
   }
 `;
 
-export const AccountSecurityForm: React.FC<AccountSecurityFormProps> = () => {
-  const [password, setPassword] = useState("");
-  const [repeatedPassword, setRepeatedPassword] = useState("");
+const initialState: State = {
+  password: "",
+  repeatedPassword: "",
+  showPassword: false,
+};
+
+interface State {
+  password: string;
+  repeatedPassword: string;
+  showPassword: boolean;
+}
+
+export const AccountSecurityForm: React.FC = () => {
+  const [values, setValues] = useState<State>(initialState);
 
   const [updatePassword, { loading }] = useMutation<
     UpdateUserPasswordMutation,
     UpdateUserPasswordMutationVariables
-  >(UPDATE_USER_PASSWORD);
+  >(UPDATE_USER_PASSWORD, {
+    onCompleted: () => {
+      setValues(initialState);
+    },
+  });
 
-  const handlePasswordChange = (
+  const handleChange = (prop: keyof State) => (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setPassword(event.target.value);
+    setValues({ ...values, [prop]: event.target.value });
   };
 
-  const handleRepeatedPasswordChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
-    setRepeatedPassword(event.target.value);
+    event.preventDefault();
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLDivElement>) => {
     event.preventDefault();
+
+    const { password, repeatedPassword } = values;
 
     if (password !== repeatedPassword) {
       // TODO: show an error to the user
@@ -86,18 +110,62 @@ export const AccountSecurityForm: React.FC<AccountSecurityFormProps> = () => {
       <CardHeader title="Change password" />
       <Divider />
       <StyledCardContent>
-        <TextField
-          label="Password"
-          variant="outlined"
-          onChange={handlePasswordChange}
-          value={password}
-        />
-        <TextField
-          label="Confirm password"
-          variant="outlined"
-          onChange={handleRepeatedPasswordChange}
-          value={repeatedPassword}
-        />
+        <FormControl variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">
+            Password
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={values.showPassword ? "text" : "password"}
+            value={values.password}
+            onChange={handleChange("password")}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {values.showPassword ? (
+                    <Visibility />
+                  ) : (
+                    <VisibilityOff />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            }
+            labelWidth={70}
+          />
+        </FormControl>
+        <FormControl variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-confirm-password">
+            Confirm password
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-confirm-password"
+            type={values.showPassword ? "text" : "password"}
+            value={values.repeatedPassword}
+            onChange={handleChange("repeatedPassword")}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {values.showPassword ? (
+                    <Visibility />
+                  ) : (
+                    <VisibilityOff />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            }
+            labelWidth={70}
+          />
+        </FormControl>
       </StyledCardContent>
       <Divider />
       <StyledCardActions>

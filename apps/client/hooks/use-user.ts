@@ -14,18 +14,19 @@ export const USER_LOGGED_IN = gql`
   }
 `;
 
-const useUser = () => {
+const useUser = (redirect = true) => {
   const queryResult = useQuery<UserLoggedInQuery>(USER_LOGGED_IN);
 
   useEffect(() => {
     if (
       !queryResult.loading &&
       queryResult.data.me === null &&
-      typeof window !== "undefined"
+      typeof window !== "undefined" &&
+      redirect
     ) {
       Router.replace("/login");
     }
-  }, [queryResult.data, queryResult.loading]);
+  }, [queryResult.data, queryResult.loading, redirect]);
 
   return queryResult;
 };

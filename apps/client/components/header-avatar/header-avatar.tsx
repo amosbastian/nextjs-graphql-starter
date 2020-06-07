@@ -13,6 +13,7 @@ import {
 } from "@apollo/react-hooks";
 import { UsernameQuery } from "@nextjs-graphql-starter/codegen";
 import { useRouter } from "next/router";
+import cloudinaryUrl from "../../utilities/cloudinary";
 
 const StyledAvatar = styled(Avatar)`
   &.MuiAvatar-root {
@@ -41,6 +42,7 @@ const USERNAME = gql`
     me {
       id
       username
+      pictureId
     }
   }
 `;
@@ -79,7 +81,10 @@ export const HeaderAvatar = () => {
         aria-haspopup="true"
         onClick={handleClick}
       >
-        <StyledAvatar alt="Amos Bastian" />
+        <StyledAvatar
+          alt="User avatar"
+          src={cloudinaryUrl(data?.me?.pictureId)}
+        />
         {data?.me?.username}
       </StyledButton>
       <Menu

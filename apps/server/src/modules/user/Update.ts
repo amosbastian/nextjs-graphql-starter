@@ -20,6 +20,9 @@ class UpdateUserInput {
   email: string | null;
 
   @Field(() => String, { nullable: true })
+  pictureId: string | null;
+
+  @Field(() => String, { nullable: true })
   password: string | null;
 }
 

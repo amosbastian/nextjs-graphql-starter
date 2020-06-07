@@ -41,7 +41,7 @@ export class UpdateUserResolver {
       input.password = await bcrypt.hash(input.password, 12);
     }
 
-    await User.update({ id: id || userId }, input);
+    await User.update({ id: id || Number(userId) }, input);
     const user = await User.findOne(id);
     return user;
   }

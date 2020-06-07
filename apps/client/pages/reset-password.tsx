@@ -4,7 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import AuthenticationLayout from "../components/authentication-layout/authentication-layout";
 import NavigationLink from "../components/navigation-link/navigation-link";
 import withApollo from "../apollo/withApollo";
-import ResetPasswordForm from "../components/reset-password-form/reset-password-form";
+import RequestPasswordResetForm from "../components/request-password-reset-form/request-password-reset-form";
 
 export const ResetPassword = () => {
   const navigationElement = (
@@ -26,7 +26,7 @@ export const ResetPassword = () => {
         you instructions on how to reset your password.
       </Typography>
       <main>
-        <ResetPasswordForm />
+        <RequestPasswordResetForm />
       </main>
     </AuthenticationLayout>
   );

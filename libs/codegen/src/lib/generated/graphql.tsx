@@ -216,6 +216,16 @@ export type UserLoggedInQuery = (
   )> }
 );
 
+export type ConfirmUserEmailMutationVariables = {
+  token: Scalars['String'];
+};
+
+
+export type ConfirmUserEmailMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'confirmUserEmail'>
+);
+
 export const AccountGeneralSettingsFormUserFragmentDoc = gql`
     fragment accountGeneralSettingsFormUser on User {
   id
@@ -553,3 +563,33 @@ export function useUserLoggedInLazyQuery(baseOptions?: ApolloReactHooks.LazyQuer
 export type UserLoggedInQueryHookResult = ReturnType<typeof useUserLoggedInQuery>;
 export type UserLoggedInLazyQueryHookResult = ReturnType<typeof useUserLoggedInLazyQuery>;
 export type UserLoggedInQueryResult = ApolloReactCommon.QueryResult<UserLoggedInQuery, UserLoggedInQueryVariables>;
+export const ConfirmUserEmailDocument = gql`
+    mutation confirmUserEmail($token: String!) {
+  confirmUserEmail(token: $token)
+}
+    `;
+export type ConfirmUserEmailMutationFn = ApolloReactCommon.MutationFunction<ConfirmUserEmailMutation, ConfirmUserEmailMutationVariables>;
+
+/**
+ * __useConfirmUserEmailMutation__
+ *
+ * To run a mutation, you first call `useConfirmUserEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConfirmUserEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [confirmUserEmailMutation, { data, loading, error }] = useConfirmUserEmailMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useConfirmUserEmailMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ConfirmUserEmailMutation, ConfirmUserEmailMutationVariables>) {
+        return ApolloReactHooks.useMutation<ConfirmUserEmailMutation, ConfirmUserEmailMutationVariables>(ConfirmUserEmailDocument, baseOptions);
+      }
+export type ConfirmUserEmailMutationHookResult = ReturnType<typeof useConfirmUserEmailMutation>;
+export type ConfirmUserEmailMutationResult = ApolloReactCommon.MutationResult<ConfirmUserEmailMutation>;
+export type ConfirmUserEmailMutationOptions = ApolloReactCommon.BaseMutationOptions<ConfirmUserEmailMutation, ConfirmUserEmailMutationVariables>;

@@ -11,5 +11,5 @@ export const createConfirmationEmail = async (userId: number) => {
     60 * 60 * 24,
   ); // 1 day expiration
 
-  return `http://localhost:3000/user/confirm/${token}`;
+  return `http://localhost:4200/confirm-email/${token}`;
 };

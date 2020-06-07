@@ -6,8 +6,13 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
-import { AccountProfilePictureFormUserFragment } from "@nextjs-graphql-starter/codegen";
-import ProgressButton from "../../progress-button/progress-button";
+import {
+  AccountProfilePictureFormUserFragment,
+  UpdateUserPictureIdMutation,
+  UpdateUserPictureIdMutationVariables,
+} from "@nextjs-graphql-starter/codegen";
+import cloudinaryUrl from "../../../utilities/cloudinary";
+import { useMutation } from "@apollo/react-hooks";
 
 const StyledAvatar = styled(Avatar)`
   height: 100px;
@@ -42,7 +47,17 @@ const StyledLabel = styled.label`
 
 export const ACCOUNT_PROFILE_PICTURE_FORM_USER_FRAGMENT = gql`
   fragment accountProfilePictureFormUser on User {
+    pictureId
     username
+  }
+`;
+
+const UPDATE_USER_PICTURE_ID = gql`
+  mutation updateUserPictureId($input: UpdateUserInput!) {
+    updateUser(input: $input) {
+      id
+      pictureId
+    }
   }
 `;
 
@@ -53,21 +68,63 @@ export interface AccountProfilePictureFormProps {
 export const AccountProfilePictureForm: React.FC<AccountProfilePictureFormProps> = ({
   user,
 }) => {
-  const { username } = user;
-  const [image, setImage] = useState<string | null>(null);
+  const { pictureId, username } = user;
+  const [image, setImage] = useState<File | null>(null);
+
+  const [updateUserPictureId] = useMutation<
+    UpdateUserPictureIdMutation,
+    UpdateUserPictureIdMutationVariables
+  >(UPDATE_USER_PICTURE_ID);
 
   const imageSelectHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setImage(URL.createObjectURL(event.target.files[0]));
+    setImage(event.target.files[0]);
   };
 
-  console.log(image);
+  const submitHandler = async (
+    event: React.FormEvent<HTMLDivElement>,
+  ) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append("file", image);
+    formData.append(
+      "upload_preset",
+      process.env.cloudinaryUploadPreset,
+    );
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${process.env.cloudinaryCloudName}/upload`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
+
+    const content = await response.json();
+    const pictureId = content.public_id;
+    console.log(pictureId);
+
+    // Image could not be uploaded to Cloudinary
+    if (!pictureId) return;
+
+    updateUserPictureId({
+      variables: { input: { pictureId } },
+    });
+  };
+
+  const src = pictureId ? cloudinaryUrl(pictureId) : null;
+  const newImageSrc = image ? URL.createObjectURL(image) : null;
 
   return (
-    <Card variant="outlined" component="form">
+    <Card
+      variant="outlined"
+      component="form"
+      onSubmit={submitHandler}
+    >
       <StyledCardContent>
-        <StyledAvatar alt="Username" src={image} />
+        <StyledAvatar alt="Username" src={src || newImageSrc} />
         <Typography align="center">{username}</Typography>
       </StyledCardContent>
       <StyledDiv>
@@ -90,13 +147,9 @@ export const AccountProfilePictureForm: React.FC<AccountProfilePictureFormProps>
           </StyledLabel>
         </div>
         {image && (
-          <ProgressButton
-            color="primary"
-            variant="contained"
-            loading={false}
-          >
+          <Button color="primary" variant="contained" type="submit">
             Confirm
-          </ProgressButton>
+          </Button>
         )}
       </StyledDiv>
     </Card>

@@ -21,6 +21,7 @@ export type User = {
   id: Scalars['ID'];
   username: Scalars['String'];
   email: Scalars['String'];
+  pictureId?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -84,6 +85,7 @@ export type ChangePasswordInput = {
 export type UpdateUserInput = {
   username?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
+  pictureId?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
 };
 
@@ -121,7 +123,20 @@ export type AccountGeneralSettingsUserQuery = (
 
 export type AccountProfilePictureFormUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'username'>
+  & Pick<User, 'pictureId' | 'username'>
+);
+
+export type UpdateUserPictureIdMutationVariables = {
+  input: UpdateUserInput;
+};
+
+
+export type UpdateUserPictureIdMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'pictureId'>
+  ) }
 );
 
 export type UpdateUserPasswordMutationVariables = {
@@ -212,7 +227,7 @@ export type UserLoggedInQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'email'>
+    & Pick<User, 'id'>
   )> }
 );
 
@@ -235,6 +250,7 @@ export const AccountGeneralSettingsFormUserFragmentDoc = gql`
     `;
 export const AccountProfilePictureFormUserFragmentDoc = gql`
     fragment accountProfilePictureFormUser on User {
+  pictureId
   username
 }
     `;
@@ -308,6 +324,39 @@ export function useAccountGeneralSettingsUserLazyQuery(baseOptions?: ApolloReact
 export type AccountGeneralSettingsUserQueryHookResult = ReturnType<typeof useAccountGeneralSettingsUserQuery>;
 export type AccountGeneralSettingsUserLazyQueryHookResult = ReturnType<typeof useAccountGeneralSettingsUserLazyQuery>;
 export type AccountGeneralSettingsUserQueryResult = ApolloReactCommon.QueryResult<AccountGeneralSettingsUserQuery, AccountGeneralSettingsUserQueryVariables>;
+export const UpdateUserPictureIdDocument = gql`
+    mutation updateUserPictureId($input: UpdateUserInput!) {
+  updateUser(input: $input) {
+    id
+    pictureId
+  }
+}
+    `;
+export type UpdateUserPictureIdMutationFn = ApolloReactCommon.MutationFunction<UpdateUserPictureIdMutation, UpdateUserPictureIdMutationVariables>;
+
+/**
+ * __useUpdateUserPictureIdMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserPictureIdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserPictureIdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserPictureIdMutation, { data, loading, error }] = useUpdateUserPictureIdMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateUserPictureIdMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateUserPictureIdMutation, UpdateUserPictureIdMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateUserPictureIdMutation, UpdateUserPictureIdMutationVariables>(UpdateUserPictureIdDocument, baseOptions);
+      }
+export type UpdateUserPictureIdMutationHookResult = ReturnType<typeof useUpdateUserPictureIdMutation>;
+export type UpdateUserPictureIdMutationResult = ApolloReactCommon.MutationResult<UpdateUserPictureIdMutation>;
+export type UpdateUserPictureIdMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateUserPictureIdMutation, UpdateUserPictureIdMutationVariables>;
 export const UpdateUserPasswordDocument = gql`
     mutation updateUserPassword($input: UpdateUserInput!) {
   updateUser(input: $input) {
@@ -533,8 +582,6 @@ export const UserLoggedInDocument = gql`
     query userLoggedIn {
   me {
     id
-    username
-    email
   }
 }
     `;

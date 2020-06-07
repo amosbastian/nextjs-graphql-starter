@@ -40,7 +40,7 @@ const StyledContentDiv = styled.div`
 `;
 
 interface AuthenticationLayoutProps {
-  navigationElement: JSX.Element;
+  navigationElement?: JSX.Element;
 }
 
 const AuthenticationLayout: React.FC<AuthenticationLayoutProps> = ({

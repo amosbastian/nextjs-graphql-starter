@@ -4,32 +4,40 @@ import TextField from "@material-ui/core/TextField";
 import { useMutation } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
 import ProgressButton from "../progress-button/progress-button";
-import {
-  ForgotPasswordMutation,
-  ForgotPasswordMutationVariables,
-} from "@nextjs-graphql-starter/codegen";
 import { useRouter } from "next/router";
+import {
+  ChangePasswordMutation,
+  ChangePasswordMutationVariables,
+} from "@nextjs-graphql-starter/codegen";
 
 const StyledForm = styled.form`
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: max-content;
-  gap: 1rem;
+  gap: ${({ theme }) => theme.spacing(2)}px;
 `;
 
-const FORGOT_PASSWORD = gql`
-  mutation forgotPassword($email: String!) {
-    forgotPassword(email: $email)
+const CHANGE_PASSWORD = gql`
+  mutation changePassword($input: ChangePasswordInput!) {
+    changePassword(input: $input) {
+      id
+    }
   }
 `;
 
-export const ResetPasswordForm: React.FC = () => {
+interface ResetPasswordFormProps {
+  token: string;
+}
+
+export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({
+  token,
+}) => {
   const router = useRouter();
 
-  const [forgotPassword, { loading }] = useMutation<
-    ForgotPasswordMutation,
-    ForgotPasswordMutationVariables
-  >(FORGOT_PASSWORD, {
+  const [changePassword, { loading }] = useMutation<
+    ChangePasswordMutation,
+    ChangePasswordMutationVariables
+  >(CHANGE_PASSWORD, {
     onCompleted: (data) => {
       if (data) {
         router.push("/login");
@@ -40,12 +48,15 @@ export const ResetPasswordForm: React.FC = () => {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const emailElement = event.currentTarget.elements.email;
+    const passwordElement = event.currentTarget.elements.newPassword;
 
     try {
-      await forgotPassword({
+      await changePassword({
         variables: {
-          email: emailElement.value,
+          input: {
+            password: passwordElement.value,
+            token,
+          },
         },
       });
     } catch (error) {
@@ -59,10 +70,10 @@ export const ResetPasswordForm: React.FC = () => {
         variant="outlined"
         required
         fullWidth
-        id="email"
-        label="Email Address"
-        name="email"
-        autoComplete="email"
+        id="newPassword"
+        label="New password"
+        name="newPassword"
+        autoComplete="password"
         autoFocus
         size="small"
       />
@@ -73,7 +84,7 @@ export const ResetPasswordForm: React.FC = () => {
         type="submit"
         variant="contained"
       >
-        Send instructions
+        Reset password
       </ProgressButton>
     </StyledForm>
   );

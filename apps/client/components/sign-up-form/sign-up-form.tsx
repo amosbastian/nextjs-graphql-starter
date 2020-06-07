@@ -1,7 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import { gql } from "apollo-boost";
+import ProgressButton from "../progress-button/progress-button";
+import { useMutation } from "@apollo/react-hooks";
+import {
+  SignUpMutation,
+  SignUpMutationVariables,
+} from "@nextjs-graphql-starter/codegen";
 
 const StyledForm = styled.form`
   display: grid;
@@ -10,7 +16,24 @@ const StyledForm = styled.form`
   gap: 1rem;
 `;
 
+const SIGN_UP = gql`
+  mutation signUp($input: SignUpInput!) {
+    signUp(input: $input) {
+      id
+    }
+  }
+`;
+
 export const SignUpForm: React.FC = () => {
+  const [signUp, { loading }] = useMutation<
+    SignUpMutation,
+    SignUpMutationVariables
+  >(SIGN_UP, {
+    onCompleted: () => console.log("User has signed up!"),
+    onError: (error) =>
+      console.error(`User could not sign up: ${error}`),
+  });
+
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -18,11 +41,15 @@ export const SignUpForm: React.FC = () => {
     const emailElement = event.currentTarget.elements.email;
     const passwordElement = event.currentTarget.elements.password;
 
-    console.log(
-      usernameElement.value,
-      emailElement.value,
-      passwordElement.value,
-    );
+    signUp({
+      variables: {
+        input: {
+          username: usernameElement.value,
+          email: emailElement.value,
+          password: passwordElement.value,
+        },
+      },
+    });
   }
 
   return (
@@ -59,14 +86,15 @@ export const SignUpForm: React.FC = () => {
         autoComplete="password"
         size="small"
       />
-      <Button
+      <ProgressButton
         color="primary"
         fullWidth
         type="submit"
+        loading={loading}
         variant="contained"
       >
         Sign up
-      </Button>
+      </ProgressButton>
     </StyledForm>
   );
 };

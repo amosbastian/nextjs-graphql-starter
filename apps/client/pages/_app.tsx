@@ -1,36 +1,34 @@
-import React from "react";
-import App from "next/app";
+import React, { useEffect } from "react";
+import { AppProps } from "next/app";
 import {
   MuiThemeProvider,
   StylesProvider,
 } from "@material-ui/core/styles";
 import { ThemeProvider as StyledComponentsThemeProvider } from "styled-components";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import theme from "../src/ui/theme";
+import useTheme from "../hooks/use-theme";
 
-class CustomApp extends App {
-  componentDidMount() {
+function CustomApp({ Component, pageProps }: AppProps) {
+  useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
       jssStyles.parentNode.removeChild(jssStyles);
     }
-  }
+  }, []);
 
-  render() {
-    const { Component, pageProps } = this.props;
+  const [theme] = useTheme();
 
-    return (
-      <StylesProvider injectFirst>
-        <MuiThemeProvider theme={theme}>
-          <StyledComponentsThemeProvider theme={theme}>
-            <CssBaseline />
-            <Component {...pageProps} />
-          </StyledComponentsThemeProvider>
-        </MuiThemeProvider>
-      </StylesProvider>
-    );
-  }
+  return (
+    <StylesProvider injectFirst>
+      <MuiThemeProvider theme={theme}>
+        <StyledComponentsThemeProvider theme={theme}>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </StyledComponentsThemeProvider>
+      </MuiThemeProvider>
+    </StylesProvider>
+  );
 }
 
 export default CustomApp;

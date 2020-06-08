@@ -29,6 +29,12 @@
           { "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }
         ]
       }
+    ],
+    "@typescript-eslint/no-empty-interface": [
+      "error",
+      {
+          "allowSingleExtends": true
+      }
     ]
   },
   "overrides": [

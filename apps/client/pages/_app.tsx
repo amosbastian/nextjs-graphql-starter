@@ -21,14 +21,14 @@ class CustomApp extends App {
     const { Component, pageProps } = this.props;
 
     return (
-      <MuiThemeProvider theme={theme}>
-        <StyledComponentsThemeProvider theme={theme}>
-          <StylesProvider injectFirst>
+      <StylesProvider injectFirst>
+        <MuiThemeProvider theme={theme}>
+          <StyledComponentsThemeProvider theme={theme}>
             <CssBaseline />
             <Component {...pageProps} />
-          </StylesProvider>
-        </StyledComponentsThemeProvider>
-      </MuiThemeProvider>
+          </StyledComponentsThemeProvider>
+        </MuiThemeProvider>
+      </StylesProvider>
     );
   }
 }

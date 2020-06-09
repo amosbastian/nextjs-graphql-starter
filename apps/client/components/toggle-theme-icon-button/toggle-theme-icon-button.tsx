@@ -9,7 +9,7 @@ export const ToggleThemeIconButton = () => {
   const { value, toggle } = useDarkMode(false);
 
   return (
-    <Tooltip title={`Switch to ${value ? "dark" : "light"} mode`}>
+    <Tooltip title={`Switch to ${value ? "light" : "dark"} mode`}>
       <IconButton aria-label="toggle theme" onClick={toggle}>
         {value ? <WbSunnyIcon /> : <Brightness2Icon />}
       </IconButton>

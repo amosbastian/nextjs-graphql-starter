@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import NavigationLink from "../navigation-link/navigation-link";
@@ -22,13 +22,8 @@ const StyledAvatar = styled(Avatar)`
   }
 `;
 
-const StyledButton = styled(Button)`
-  span.MuiButton-label {
-    text-transform: none;
-    display: grid;
-    gap: ${({ theme }) => theme.spacing(2)}px;
-    grid-template-columns: max-content max-content;
-  }
+const StyledIconButton = styled(IconButton)`
+  padding: 0;
 `;
 
 const LOGOUT = gql`
@@ -76,17 +71,16 @@ export const HeaderAvatar = () => {
 
   return (
     <div>
-      <StyledButton
+      <StyledIconButton
         aria-controls="user-menu"
         aria-haspopup="true"
         onClick={handleClick}
       >
         <StyledAvatar
-          alt="User avatar"
+          alt={data?.me?.username}
           src={cloudinaryUrl(data?.me?.pictureId)}
         />
-        {data?.me?.username}
-      </StyledButton>
+      </StyledIconButton>
       <Menu
         anchorEl={anchorEl}
         keepMounted

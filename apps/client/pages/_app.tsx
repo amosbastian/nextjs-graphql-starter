@@ -1,12 +1,7 @@
 import React, { useEffect } from "react";
 import { AppProps } from "next/app";
-import {
-  MuiThemeProvider,
-  StylesProvider,
-} from "@material-ui/core/styles";
-import { ThemeProvider as StyledComponentsThemeProvider } from "styled-components";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import useTheme from "../hooks/use-theme";
+import Providers from "../components/providers/providers";
 
 function CustomApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -17,17 +12,11 @@ function CustomApp({ Component, pageProps }: AppProps) {
     }
   }, []);
 
-  const [theme] = useTheme();
-
   return (
-    <StylesProvider injectFirst>
-      <MuiThemeProvider theme={theme}>
-        <StyledComponentsThemeProvider theme={theme}>
-          <CssBaseline />
-          <Component {...pageProps} />
-        </StyledComponentsThemeProvider>
-      </MuiThemeProvider>
-    </StylesProvider>
+    <Providers>
+      <CssBaseline />
+      <Component {...pageProps} />
+    </Providers>
   );
 }
 

@@ -7,7 +7,7 @@ import Document, {
 } from "next/document";
 import { ServerStyleSheet } from "styled-components";
 import { ServerStyleSheets } from "@material-ui/core/styles";
-import theme from "../src/ui/theme";
+import { lightTheme } from "../ui/theme";
 
 export default class CustomDocument extends Document<{
   styleTags: ReactElement[];
@@ -52,7 +52,7 @@ export default class CustomDocument extends Document<{
           />
           <meta
             name="theme-color"
-            content={theme.palette.primary.main}
+            content={lightTheme.palette.primary.main}
           />
           <link
             rel="stylesheet"

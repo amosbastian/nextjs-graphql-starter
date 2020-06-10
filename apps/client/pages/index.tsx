@@ -11,8 +11,7 @@ export const Index = () => {
   if (data && data.me) {
     return (
       <SiteLayout>
-        <Typography variant="h1">You are logged in!</Typography>
-        <pre>{JSON.stringify(data?.me, null, 2)}</pre>
+        <Typography variant="h1">Hi, {data.me.username}</Typography>
       </SiteLayout>
     );
   }

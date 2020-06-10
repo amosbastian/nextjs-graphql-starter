@@ -8,6 +8,7 @@ export const USER_LOGGED_IN = gql`
   query userLoggedIn {
     me {
       id
+      username
     }
   }
 `;

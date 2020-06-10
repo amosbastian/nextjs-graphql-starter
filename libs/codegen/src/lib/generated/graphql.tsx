@@ -227,7 +227,7 @@ export type UserLoggedInQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id'>
+    & Pick<User, 'id' | 'username'>
   )> }
 );
 
@@ -583,6 +583,7 @@ export const UserLoggedInDocument = gql`
     query userLoggedIn {
   me {
     id
+    username
   }
 }
     `;

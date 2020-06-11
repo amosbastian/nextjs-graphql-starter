@@ -19,16 +19,10 @@ class UpdateUserInput {
   @Field(() => String, { nullable: true })
   @MinLength(3, { message: "Minimum length is $constraint1" })
   @MaxLength(30, { message: "Maximum length is $constraint1" })
-  @IsUsernameAlreadyExist({
-    message: "Username $value is already in use",
-  })
   username: string | null;
 
   @Field(() => String, { nullable: true })
   @IsEmail()
-  @IsEmailAlreadyExist({
-    message: "Email $value is already in use",
-  })
   email: string | null;
 
   @Field(() => String, { nullable: true })
@@ -47,7 +41,7 @@ export class UpdateUserResolver {
     @Arg("input") input: UpdateUserInput,
     @Ctx() context: CustomContext,
   ): Promise<User | null> {
-    const userId = context.req.session.userId;
+    const userId = id || context.req.session.userId;
 
     if (!id && !userId) {
       return null;
@@ -55,6 +49,30 @@ export class UpdateUserResolver {
 
     if (input.password) {
       input.password = await bcrypt.hash(input.password, 12);
+    }
+
+    // FIXME: probably a better way to do this
+    if (input.username) {
+      const user = await User.findOne({
+        where: { username: input.username },
+      });
+      if (user && user.id !== userId) {
+        throw new Error(
+          `Username ${input.username} is already in use`,
+        );
+      }
+    }
+
+    // FIXME: probably a better way to do this
+    if (input.email) {
+      const user = await User.findOne({
+        where: { email: input.email },
+      });
+      if (user && user.id !== userId) {
+        throw new Error(
+          `Email address ${input.email} is already in use`,
+        );
+      }
     }
 
     await User.update({ id: id || Number(userId) }, input);

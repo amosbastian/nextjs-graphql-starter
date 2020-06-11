@@ -56,7 +56,7 @@ export const AccountGeneralSettingsForm: React.FC<AccountGeneralSettingsFormProp
   const [username, setUsername] = useState(user.username);
   const [email, setEmail] = useState(user.email);
 
-  const [updateUser, { loading }] = useMutation<
+  const [updateUser, { error, loading }] = useMutation<
     UpdateUserAccountSettingsMutation,
     UpdateUserAccountSettingsMutationVariables
   >(UPDATE_USER_ACCOUNT_SETTINGS);
@@ -76,16 +76,25 @@ export const AccountGeneralSettingsForm: React.FC<AccountGeneralSettingsFormProp
   const handleSubmit = (event: React.FormEvent<HTMLDivElement>) => {
     event.preventDefault();
 
+    const input: UpdateUserAccountSettingsMutationVariables["input"] = {};
+
+    if (user.username !== username) input.username = username;
+    if (user.email !== email) input.email = email;
+
+    if (!Object.keys(input).length) {
+      return;
+    }
+
     updateUser({
       variables: {
         id: user.id,
-        input: {
-          email,
-          username,
-        },
+        input,
       },
     });
   };
+
+  const initialChanged =
+    user.username !== username || user.email !== email;
 
   return (
     <Card variant="outlined" component="form" onSubmit={handleSubmit}>
@@ -112,6 +121,7 @@ export const AccountGeneralSettingsForm: React.FC<AccountGeneralSettingsFormProp
           loading={loading}
           variant="contained"
           type="submit"
+          disabled={!initialChanged}
         >
           Save changes
         </ProgressButton>

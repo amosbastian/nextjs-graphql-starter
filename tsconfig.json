@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "strictNullChecks": true,
     "paths": {
       "@nextjs-graphql-starter/codegen": ["libs/codegen/src/index.ts"]
     }

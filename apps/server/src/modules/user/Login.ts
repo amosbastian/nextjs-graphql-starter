@@ -38,13 +38,13 @@ export class LoginResolver {
 
     if (!passwordsMatch) {
       throw new AuthenticationError(
-        "The entered email and password combination is wrong.",
+        "The entered email and password combination is wrong",
       );
     }
 
     if (!user.confirmedEmail) {
       throw new Error(
-        "Your must confirm your email before logging in!",
+        "Your must confirm your email before logging in",
       );
     }
 

@@ -23,14 +23,13 @@ export class ChangePasswordResolver {
     const userId = await redis.get(forgotPasswordPrefix + token);
 
     if (!userId) {
-      return null;
+      throw new Error("User could not be found");
     }
 
     const user = await User.findOne(userId);
 
-    // TODO: log Error
     if (!user) {
-      return null;
+      throw new Error("User could not be found");
     }
 
     const newPassword = await bcrypt.hash(password, 12);

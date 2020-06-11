@@ -14,18 +14,19 @@ class SignUpInput implements Partial<User> {
   @MinLength(3, { message: "Minimum length is $constraint1" })
   @MaxLength(30, { message: "Maximum length is $constraint1" })
   @IsUsernameAlreadyExist({
-    message: "Username $value is already taken",
+    message: "Username $value is already in use",
   })
   username: string;
 
   @Field()
   @IsEmail()
   @IsEmailAlreadyExist({
-    message: "Email $value has already been used",
+    message: "Email $value is already in use",
   })
   email: string;
 
   @Field()
+  @MinLength(6, { message: "Minimum length is $constraint1" })
   password: string;
 }
 

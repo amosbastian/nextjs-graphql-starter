@@ -12,7 +12,7 @@ export class ConfirmUserEmailResolver {
     const userId = await redis.get(confirmEmailPrefix + token);
 
     if (!userId) {
-      return false;
+      throw new Error("User could not be found");
     }
 
     await User.update(

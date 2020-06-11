@@ -13,9 +13,8 @@ export class ForgotPasswordResolver {
   ): Promise<boolean> {
     const user = await User.findOne({ where: { email } });
 
-    // TODO: throw an Error
     if (!user) {
-      return false;
+      throw new Error("User could not be found");
     }
 
     const token = v4();

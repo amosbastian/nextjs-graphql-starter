@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
@@ -11,9 +11,28 @@ import {
   AccountGeneralSettingsFormUserFragment,
   UpdateUserAccountSettingsMutation,
   UpdateUserAccountSettingsMutationVariables,
+  UpdateUserInput,
 } from "@nextjs-graphql-starter/codegen";
 import { useMutation } from "@apollo/react-hooks";
 import ProgressButton from "../../progress-button/progress-button";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { updatedObject } from "../../../utilities";
+
+const validationSchema: yup.ObjectSchema<UpdateUserInput> = yup
+  .object()
+  .shape({
+    email: yup
+      .string()
+      .required("Enter your email address")
+      .email("Enter a valid email address"),
+    username: yup
+      .string()
+      .required("Enter a username")
+      .min(3, "Username must be at least 3 characters")
+      .max(30, "Username can be 30 characters at most"),
+  })
+  .defined();
 
 const StyledCardActions = styled(CardActions)`
   justify-content: flex-end;
@@ -53,65 +72,59 @@ export interface AccountGeneralSettingsFormProps {
 export const AccountGeneralSettingsForm: React.FC<AccountGeneralSettingsFormProps> = ({
   user,
 }) => {
-  const [username, setUsername] = useState(user.username);
-  const [email, setEmail] = useState(user.email);
+  const defaultValues: UpdateUserInput = {
+    username: user.username,
+    email: user.email,
+  };
 
-  const [updateUser, { error, loading }] = useMutation<
+  const { errors, handleSubmit, register } = useForm<UpdateUserInput>(
+    {
+      validationSchema,
+      defaultValues,
+    },
+  );
+
+  // FIXME: use error from mutation as well
+  const [updateUser, { loading }] = useMutation<
     UpdateUserAccountSettingsMutation,
     UpdateUserAccountSettingsMutationVariables
   >(UPDATE_USER_ACCOUNT_SETTINGS);
 
-  const handleUsernameChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setUsername(event.target.value);
-  };
-
-  const handleEmailChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setEmail(event.target.value);
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLDivElement>) => {
-    event.preventDefault();
-
-    const input: UpdateUserAccountSettingsMutationVariables["input"] = {};
-
-    if (user.username !== username) input.username = username;
-    if (user.email !== email) input.email = email;
-
-    if (!Object.keys(input).length) {
-      return;
-    }
+  const onSubmit = (input: UpdateUserInput) => {
+    const updatedInput = updatedObject(input, defaultValues);
 
     updateUser({
       variables: {
         id: user.id,
-        input,
+        input: updatedInput,
       },
     });
   };
 
-  const initialChanged =
-    user.username !== username || user.email !== email;
-
   return (
-    <Card variant="outlined" component="form" onSubmit={handleSubmit}>
+    <Card
+      variant="outlined"
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <CardHeader title="Profile" />
       <Divider />
       <StyledCardContent>
         <TextField
           label="Username"
           variant="outlined"
-          value={username}
-          onChange={handleUsernameChange}
+          name="username"
+          inputRef={register}
+          helperText={errors?.username?.message}
+          error={Boolean(errors?.username?.message)}
         />
         <TextField
           label="Email Address"
           variant="outlined"
-          value={email}
-          onChange={handleEmailChange}
+          name="email"
+          inputRef={register}
+          helperText={errors?.email?.message}
+          error={Boolean(errors?.email?.message)}
         />
       </StyledCardContent>
       <Divider />
@@ -121,7 +134,6 @@ export const AccountGeneralSettingsForm: React.FC<AccountGeneralSettingsFormProp
           loading={loading}
           variant="contained"
           type="submit"
-          disabled={!initialChanged}
         >
           Save changes
         </ProgressButton>

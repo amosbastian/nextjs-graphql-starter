@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import TextField from "@material-ui/core/TextField";
 import { useMutation } from "@apollo/react-hooks";
@@ -8,6 +8,18 @@ import {
   ForgotPasswordMutation,
   ForgotPasswordMutationVariables,
 } from "@nextjs-graphql-starter/codegen";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+
+const validationSchema: yup.ObjectSchema<ForgotPasswordInput> = yup
+  .object()
+  .shape({
+    email: yup
+      .string()
+      .required("Enter your email address")
+      .email("Enter a valid email address"),
+  })
+  .defined();
 
 const StyledForm = styled.form`
   display: grid;
@@ -22,18 +34,26 @@ const FORGOT_PASSWORD = gql`
   }
 `;
 
+type ForgotPasswordInput = {
+  email: string;
+};
+
 export const RequestPasswordResetForm: React.FC = () => {
-  const [email, setEmail] = useState("");
+  const { errors, handleSubmit, register, reset } = useForm<
+    ForgotPasswordInput
+  >({
+    validationSchema,
+  });
 
   const [forgotPassword, { loading }] = useMutation<
     ForgotPasswordMutation,
     ForgotPasswordMutationVariables
   >(FORGOT_PASSWORD, {
-    onCompleted: () => setEmail(""),
+    onCompleted: () => reset(),
   });
 
-  async function handleSubmit(event) {
-    event.preventDefault();
+  async function onSubmit(input: ForgotPasswordInput) {
+    const { email } = input;
 
     try {
       await forgotPassword({
@@ -46,24 +66,19 @@ export const RequestPasswordResetForm: React.FC = () => {
     }
   }
 
-  const handleEmailChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setEmail(event.target.value);
-  };
-
   return (
-    <StyledForm onSubmit={handleSubmit}>
+    <StyledForm onSubmit={handleSubmit(onSubmit)}>
       <TextField
         variant="outlined"
-        required
         fullWidth
         label="Email Address"
-        value={email}
         autoComplete="email"
         autoFocus
+        name="email"
         size="small"
-        onChange={handleEmailChange}
+        inputRef={register}
+        helperText={errors?.email?.message}
+        error={Boolean(errors?.email?.message)}
       />
       <ProgressButton
         color="primary"

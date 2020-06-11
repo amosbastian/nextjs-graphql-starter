@@ -12,6 +12,7 @@ import {
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import PasswordField from "../password-field/password-field";
+import { useSnackbar } from "notistack";
 
 const validationSchema: yup.ObjectSchema<SignUpInput> = yup
   .object()
@@ -48,7 +49,11 @@ const SIGN_UP = gql`
 `;
 
 export const SignUpForm: React.FC = () => {
-  const { errors, handleSubmit, register } = useForm<SignUpInput>({
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { errors, handleSubmit, register, reset } = useForm<
+    SignUpInput
+  >({
     validationSchema,
   });
 
@@ -56,9 +61,12 @@ export const SignUpForm: React.FC = () => {
     SignUpMutation,
     SignUpMutationVariables
   >(SIGN_UP, {
-    onCompleted: () => console.log("User has signed up!"),
-    onError: (error) =>
-      console.error(`User could not sign up: ${error}`),
+    onCompleted: () => {
+      reset();
+      enqueueSnackbar("Email sent!", { variant: "success" });
+    },
+    onError: () =>
+      enqueueSnackbar("Something went wrong", { variant: "error" }),
   });
 
   async function onSubmit(input: SignUpInput) {

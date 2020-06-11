@@ -10,6 +10,7 @@ import {
 } from "@nextjs-graphql-starter/codegen";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
+import { useSnackbar } from "notistack";
 
 const validationSchema: yup.ObjectSchema<ForgotPasswordInput> = yup
   .object()
@@ -39,6 +40,8 @@ type ForgotPasswordInput = {
 };
 
 export const RequestPasswordResetForm: React.FC = () => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const { errors, handleSubmit, register, reset } = useForm<
     ForgotPasswordInput
   >({
@@ -49,7 +52,12 @@ export const RequestPasswordResetForm: React.FC = () => {
     ForgotPasswordMutation,
     ForgotPasswordMutationVariables
   >(FORGOT_PASSWORD, {
-    onCompleted: () => reset(),
+    onCompleted: () => {
+      reset();
+      enqueueSnackbar("Email sent!", { variant: "success" });
+    },
+    onError: () =>
+      enqueueSnackbar("Something went wrong", { variant: "error" }),
   });
 
   async function onSubmit(input: ForgotPasswordInput) {

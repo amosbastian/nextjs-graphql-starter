@@ -8,6 +8,7 @@ import {
   ConfirmUserEmailMutation,
   ConfirmUserEmailMutationVariables,
 } from "@nextjs-graphql-starter/codegen";
+import { useSnackbar } from "notistack";
 
 const CONFIRM_USER_EMAIL = gql`
   mutation confirmUserEmail($token: String!) {
@@ -16,6 +17,7 @@ const CONFIRM_USER_EMAIL = gql`
 `;
 
 export const ConfirmEmail = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
   const { token } = router.query;
 
@@ -23,7 +25,10 @@ export const ConfirmEmail = () => {
     ConfirmUserEmailMutation,
     ConfirmUserEmailMutationVariables
   >(CONFIRM_USER_EMAIL, {
-    onCompleted: () => router.push("/"),
+    onCompleted: () => {
+      enqueueSnackbar("Email confirmed!", { variant: "success" });
+      router.push("/");
+    },
   });
 
   useEffect(() => {

@@ -7,7 +7,30 @@ import { useMutation } from "@apollo/react-hooks";
 import {
   SignUpMutation,
   SignUpMutationVariables,
+  SignUpInput,
 } from "@nextjs-graphql-starter/codegen";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import PasswordField from "../password-field/password-field";
+
+const validationSchema: yup.ObjectSchema<SignUpInput> = yup
+  .object()
+  .shape({
+    username: yup
+      .string()
+      .required("Enter a username")
+      .min(3, "Username must be at least 3 characters")
+      .max(30, "Username can be 30 characters at most"),
+    email: yup
+      .string()
+      .required("Enter an email address")
+      .email("Enter a valid email address"),
+    password: yup
+      .string()
+      .required("Enter a password")
+      .min(6, "Must be at least 6 characters long"),
+  })
+  .defined();
 
 const StyledForm = styled.form`
   display: grid;
@@ -25,6 +48,10 @@ const SIGN_UP = gql`
 `;
 
 export const SignUpForm: React.FC = () => {
+  const { errors, handleSubmit, register } = useForm<SignUpInput>({
+    validationSchema,
+  });
+
   const [signUp, { loading }] = useMutation<
     SignUpMutation,
     SignUpMutationVariables
@@ -34,29 +61,18 @@ export const SignUpForm: React.FC = () => {
       console.error(`User could not sign up: ${error}`),
   });
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-
-    const usernameElement = event.currentTarget.elements.username;
-    const emailElement = event.currentTarget.elements.email;
-    const passwordElement = event.currentTarget.elements.password;
-
+  async function onSubmit(input: SignUpInput) {
     signUp({
       variables: {
-        input: {
-          username: usernameElement.value,
-          email: emailElement.value,
-          password: passwordElement.value,
-        },
+        input,
       },
     });
   }
 
   return (
-    <StyledForm onSubmit={handleSubmit}>
+    <StyledForm onSubmit={handleSubmit(onSubmit)}>
       <TextField
         variant="outlined"
-        required
         fullWidth
         id="username"
         label="Username"
@@ -64,20 +80,23 @@ export const SignUpForm: React.FC = () => {
         autoComplete="username"
         autoFocus
         size="small"
+        inputRef={register}
+        helperText={errors?.username?.message}
+        error={Boolean(errors?.username?.message)}
       />
       <TextField
         variant="outlined"
-        required
         fullWidth
         id="email"
         label="Email Address"
         name="email"
         autoComplete="email"
         size="small"
+        inputRef={register}
+        helperText={errors?.email?.message}
+        error={Boolean(errors?.email?.message)}
       />
-      <TextField
-        variant="outlined"
-        required
+      <PasswordField
         fullWidth
         name="password"
         label="Password"
@@ -85,6 +104,9 @@ export const SignUpForm: React.FC = () => {
         id="password"
         autoComplete="password"
         size="small"
+        inputRef={register}
+        helperText={errors?.password?.message}
+        error={Boolean(errors?.password?.message)}
       />
       <ProgressButton
         color="primary"

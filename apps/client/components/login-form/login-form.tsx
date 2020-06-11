@@ -82,17 +82,12 @@ export const LoginForm: React.FC = () => {
     },
   });
 
-  async function onSubmit(data: LoginInput) {
-    const { email, password } = data;
-
+  async function onSubmit(input: LoginInput) {
     try {
       await client.resetStore();
       await login({
         variables: {
-          input: {
-            email,
-            password,
-          },
+          input,
         },
       });
     } catch (error) {

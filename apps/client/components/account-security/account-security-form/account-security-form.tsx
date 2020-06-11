@@ -95,7 +95,7 @@ export const AccountSecurityForm: React.FC = () => {
           id="outlined-adornment-password"
           name="password"
           label="Password"
-          inputRef={register()}
+          inputRef={register}
           helperText={errors?.password?.message}
           error={Boolean(errors?.password?.message)}
         />
@@ -103,7 +103,7 @@ export const AccountSecurityForm: React.FC = () => {
           id="outlined-adornment-repeated-password"
           name="repeatedPassword"
           label="Repeat password"
-          inputRef={register()}
+          inputRef={register}
           helperText={errors?.repeatedPassword?.message}
           error={Boolean(errors?.repeatedPassword?.message)}
         />

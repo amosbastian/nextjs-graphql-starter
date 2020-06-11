@@ -4,13 +4,31 @@ import TextField from "@material-ui/core/TextField";
 import {
   LoginMutation,
   LoginMutationVariables,
+  LoginInput,
 } from "@nextjs-graphql-starter/codegen";
 import { useApolloClient, useMutation } from "@apollo/react-hooks";
 import { useRouter } from "next/router";
 import { gql } from "apollo-boost";
 import ProgressButton from "../progress-button/progress-button";
 import NavigationLink from "../navigation-link/navigation-link";
-import { USER_LOGGED_IN } from "apps/client/hooks/use-user";
+import { USER_LOGGED_IN } from "../../hooks/use-user";
+import { useForm } from "react-hook-form";
+import PasswordField from "../password-field/password-field";
+import * as yup from "yup";
+
+const validationSchema: yup.ObjectSchema<LoginInput> = yup
+  .object()
+  .shape({
+    email: yup
+      .string()
+      .required("Enter your email address")
+      .email("Enter a valid email address"),
+    password: yup
+      .string()
+      .required("Enter your password")
+      .min(6, "Must be at least 6 characters long"),
+  })
+  .defined();
 
 const StyledForm = styled.form`
   display: grid;
@@ -36,7 +54,11 @@ const LOGIN = gql`
 export const LoginForm: React.FC = () => {
   const client = useApolloClient();
   const router = useRouter();
+  const { errors, handleSubmit, register } = useForm<LoginInput>({
+    validationSchema,
+  });
 
+  // FIXME: use error from mutation as well
   const [login, { loading }] = useMutation<
     LoginMutation,
     LoginMutationVariables
@@ -54,25 +76,22 @@ export const LoginForm: React.FC = () => {
       });
     },
     onCompleted: (data) => {
-      if (data.login.username) {
+      if (data.login?.username) {
         router.push("/");
       }
     },
   });
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-
-    const emailElement = event.currentTarget.elements.email;
-    const passwordElement = event.currentTarget.elements.password;
+  async function onSubmit(data: LoginInput) {
+    const { email, password } = data;
 
     try {
       await client.resetStore();
       await login({
         variables: {
           input: {
-            email: emailElement.value,
-            password: passwordElement.value,
+            email,
+            password,
           },
         },
       });
@@ -82,10 +101,9 @@ export const LoginForm: React.FC = () => {
   }
 
   return (
-    <StyledForm onSubmit={handleSubmit}>
+    <StyledForm onSubmit={handleSubmit(onSubmit)}>
       <TextField
         variant="outlined"
-        required
         fullWidth
         id="email"
         label="Email Address"
@@ -93,20 +111,23 @@ export const LoginForm: React.FC = () => {
         autoComplete="email"
         autoFocus
         size="small"
+        inputRef={register}
+        helperText={errors?.email?.message}
+        error={Boolean(errors?.email?.message)}
       />
-      <TextField
-        variant="outlined"
-        required
+      <PasswordField
         fullWidth
         name="password"
         label="Password"
-        type="password"
         id="password"
         autoComplete="password"
         size="small"
+        inputRef={register}
+        helperText={errors?.password?.message}
+        error={Boolean(errors?.password?.message)}
       />
       <StyledSpan>
-        <NavigationLink href="reset-password">
+        <NavigationLink underline="none" href="/reset-password">
           Forgot password?
         </NavigationLink>
       </StyledSpan>

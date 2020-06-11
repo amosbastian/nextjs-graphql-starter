@@ -6,6 +6,7 @@ import {
 import { ThemeProvider as StyledComponentsThemeProvider } from "styled-components";
 import { darkTheme, lightTheme } from "../../ui/theme";
 import useDarkMode from "use-dark-mode";
+import SnackbarProvider from "./snackbar-provider";
 
 export const Providers = ({ children }) => {
   const darkMode = useDarkMode(false);
@@ -16,7 +17,7 @@ export const Providers = ({ children }) => {
     <StylesProvider injectFirst>
       <MuiThemeProvider theme={theme}>
         <StyledComponentsThemeProvider theme={theme}>
-          {children}
+          <SnackbarProvider>{children}</SnackbarProvider>
         </StyledComponentsThemeProvider>
       </MuiThemeProvider>
     </StylesProvider>

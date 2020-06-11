@@ -55,6 +55,7 @@
     "next-with-apollo": "^5.0.1",
     "node-fetch": "^2.6.0",
     "nodemailer": "^6.4.6",
+    "notistack": "^0.9.17",
     "pg": "^8.2.1",
     "react": "16.12.0",
     "react-dom": "16.12.0",

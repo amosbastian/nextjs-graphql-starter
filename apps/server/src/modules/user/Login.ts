@@ -1,9 +1,20 @@
 import { Resolver, Mutation, Arg, Ctx } from "type-graphql";
 import bcrypt from "bcryptjs";
 import { User } from "../../entity/User";
-import { LoginInput } from "./login/LoginInput";
 import { CustomContext } from "../../types/ResolverContext";
 import { AuthenticationError } from "apollo-server-express";
+import { IsEmail } from "class-validator";
+import { InputType, Field } from "type-graphql";
+
+@InputType()
+class LoginInput implements Partial<User> {
+  @Field()
+  @IsEmail()
+  email: string;
+
+  @Field()
+  password: string;
+}
 
 @Resolver()
 export class LoginResolver {

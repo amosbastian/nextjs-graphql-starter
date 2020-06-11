@@ -2,8 +2,17 @@ import { Resolver, Mutation, Arg } from "type-graphql";
 import { User } from "../../entity/User";
 import { redis } from "../../redis";
 import { forgotPasswordPrefix } from "../../constants/redis";
-import { ChangePasswordInput } from "./changePassword/ChangePasswordInput";
 import bcrypt from "bcryptjs";
+import { InputType, Field } from "type-graphql";
+
+@InputType()
+export class ChangePasswordInput {
+  @Field()
+  password: string;
+
+  @Field()
+  token: string;
+}
 
 @Resolver()
 export class ChangePasswordResolver {

@@ -1,3 +1,5 @@
+import { GraphQLError } from "graphql";
+
 export function fromEntries<T>(entries: [keyof T, T[keyof T]][]): T {
   return entries.reduce(
     (acc, [key, value]) => ({ ...acc, [key]: value }),
@@ -25,3 +27,29 @@ export function updatedObject<T>(obj1: T, obj2: T) {
 
   return fromEntries(updatedEntries);
 }
+
+export const normaliseGraphQLErrors = <T>(
+  errors?: readonly GraphQLError[],
+): Partial<T> => {
+  if (!errors) {
+    return {};
+  }
+
+  const normalisedErrors: Partial<T> = {};
+
+  errors.forEach((error) => {
+    if (error.message === "Argument Validation Error") {
+      const validationErrors =
+        error.extensions?.exception.validationErrors;
+
+      validationErrors.forEach((validationError) => {
+        const constraints = Object.values(
+          validationError.constraints,
+        );
+        normalisedErrors[validationError.property] = constraints[0];
+      });
+    }
+  });
+
+  return normalisedErrors;
+};

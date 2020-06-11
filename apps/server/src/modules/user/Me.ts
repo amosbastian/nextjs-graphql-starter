@@ -1,6 +1,6 @@
 import { User } from "../../entity/User";
 import { Resolver, Query, Ctx } from "type-graphql";
-import { CustomContext } from "../../types/ResolverContext";
+import { CustomContext } from "../../types/CustomContext";
 
 @Resolver()
 export class MeResolver {

@@ -26,10 +26,12 @@ export class ForgotPasswordResolver {
       60 * 60 * 24,
     );
 
-    await sendEmail(
-      email,
-      `http://localhost:4200/reset-password/${token}`,
-    );
+    const url =
+      process.env.NODE_ENV === "development"
+        ? `http://localhost:4200/reset-password/${token}`
+        : `https://${process.env.DOMAIN_NAME}/reset-password/${token}`;
+
+    await sendEmail(email, url);
 
     return true;
   }

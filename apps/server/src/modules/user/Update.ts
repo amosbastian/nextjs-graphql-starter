@@ -9,7 +9,7 @@ import {
 } from "type-graphql";
 import { User } from "../../entity/User";
 import bcrypt from "bcryptjs";
-import { CustomContext } from "../../types/ResolverContext";
+import { CustomContext } from "../../types/CustomContext";
 import { MinLength, MaxLength, IsEmail } from "class-validator";
 import { IsUsernameAlreadyExist } from "./validation/isUsernameAlreadyExist";
 import { IsEmailAlreadyExist } from "./validation/isEmailAlreadyExist";

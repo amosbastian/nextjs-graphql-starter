@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Arg, Ctx } from "type-graphql";
 import bcrypt from "bcryptjs";
 import { User } from "../../entity/User";
-import { CustomContext } from "../../types/ResolverContext";
+import { CustomContext } from "../../types/CustomContext";
 import { AuthenticationError } from "apollo-server-express";
 import { IsEmail } from "class-validator";
 import { InputType, Field } from "type-graphql";

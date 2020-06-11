@@ -4,5 +4,6 @@ module.exports = {
     cloudinaryUploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET,
     cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
     cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
+    domainName: process.env.DOMAIN_NAME,
   },
 };

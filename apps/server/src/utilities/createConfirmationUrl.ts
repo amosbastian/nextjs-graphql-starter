@@ -11,5 +11,7 @@ export const createConfirmationEmail = async (userId: number) => {
     60 * 60 * 24,
   ); // 1 day expiration
 
-  return `http://localhost:4200/confirm-email/${token}`;
+  return process.env.NODE_ENV === "development"
+    ? `http://localhost:4200/confirm-email/${token}`
+    : `https://${process.env.DOMAIN_NAME}/confirm-email/${token}`;
 };

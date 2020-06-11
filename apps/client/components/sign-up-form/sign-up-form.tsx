@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import PasswordField from "../password-field/password-field";
 import { useSnackbar } from "notistack";
+import { normaliseGraphQLErrors } from "../../utilities";
 
 const validationSchema: yup.ObjectSchema<SignUpInput> = yup
   .object()
@@ -57,7 +58,7 @@ export const SignUpForm: React.FC = () => {
     validationSchema,
   });
 
-  const [signUp, { loading }] = useMutation<
+  const [signUp, { loading, error }] = useMutation<
     SignUpMutation,
     SignUpMutationVariables
   >(SIGN_UP, {
@@ -65,9 +66,11 @@ export const SignUpForm: React.FC = () => {
       reset();
       enqueueSnackbar("Email sent!", { variant: "success" });
     },
-    onError: () =>
-      enqueueSnackbar("Something went wrong", { variant: "error" }),
   });
+
+  const normalisedErrors = normaliseGraphQLErrors<SignUpInput>(
+    error?.graphQLErrors,
+  );
 
   async function onSubmit(input: SignUpInput) {
     signUp({
@@ -89,8 +92,13 @@ export const SignUpForm: React.FC = () => {
         autoFocus
         size="small"
         inputRef={register}
-        helperText={errors?.username?.message}
-        error={Boolean(errors?.username?.message)}
+        helperText={
+          errors?.username?.message || normalisedErrors.username
+        }
+        error={
+          Boolean(errors?.username?.message) ||
+          Boolean(normalisedErrors?.username)
+        }
       />
       <TextField
         variant="outlined"
@@ -101,8 +109,11 @@ export const SignUpForm: React.FC = () => {
         autoComplete="email"
         size="small"
         inputRef={register}
-        helperText={errors?.email?.message}
-        error={Boolean(errors?.email?.message)}
+        helperText={errors?.email?.message || normalisedErrors.email}
+        error={
+          Boolean(errors?.email?.message) ||
+          Boolean(normalisedErrors?.email)
+        }
       />
       <PasswordField
         fullWidth

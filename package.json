@@ -58,12 +58,14 @@
     "pg": "^8.2.1",
     "react": "16.12.0",
     "react-dom": "16.12.0",
+    "react-hook-form": "^5.7.2",
     "reflect-metadata": "^0.1.13",
     "styled-components": "5.0.1",
     "type-graphql": "^1.0.0-rc.2",
     "typeorm": "^0.2.25",
     "use-dark-mode": "^2.3.1",
-    "uuid": "^8.1.0"
+    "uuid": "^8.1.0",
+    "yup": "^0.29.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.15.0",
@@ -95,6 +97,7 @@
     "@types/react-dom": "16.9.4",
     "@types/styled-components": "^5.1.0",
     "@types/uuid": "^8.0.0",
+    "@types/yup": "^0.29.2",
     "@typescript-eslint/eslint-plugin": "2.19.2",
     "@typescript-eslint/parser": "2.19.2",
     "babel-plugin-styled-components": "1.10.7",

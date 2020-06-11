@@ -1,17 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Divider from "@material-ui/core/Divider";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import InputLabel from "@material-ui/core/InputLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import FormControl from "@material-ui/core/FormControl";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import IconButton from "@material-ui/core/IconButton";
-import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { useMutation } from "@apollo/react-hooks";
 import ProgressButton from "../../progress-button/progress-button";
@@ -19,6 +11,22 @@ import {
   UpdateUserPasswordMutation,
   UpdateUserPasswordMutationVariables,
 } from "@nextjs-graphql-starter/codegen";
+import { useForm } from "react-hook-form";
+import PasswordField from "../../password-field/password-field";
+import styled from "styled-components";
+import * as yup from "yup";
+
+const validationSchema = yup.object().shape({
+  password: yup
+    .string()
+    .required("Enter a new password")
+    .min(6, "Must be at least 6 characters long"),
+  repeatedPassword: yup
+    .string()
+    .required("Repeat the password")
+    .min(6, "Must be at least 6 characters long")
+    .equals([yup.ref("password")], "Passwords must match"),
+});
 
 const StyledCardActions = styled(CardActions)`
   justify-content: flex-end;
@@ -46,55 +54,24 @@ const UPDATE_USER_PASSWORD = gql`
   }
 `;
 
-const initialState: State = {
-  password: "",
-  repeatedPassword: "",
-  showPassword: false,
-};
-
-interface State {
+type ChangePasswordFormData = {
   password: string;
   repeatedPassword: string;
-  showPassword: boolean;
-}
+};
 
 export const AccountSecurityForm: React.FC = () => {
-  const [values, setValues] = useState<State>(initialState);
+  const { errors, handleSubmit, register } = useForm<
+    ChangePasswordFormData
+  >({ validationSchema });
 
+  // FIXME: use error from mutation as well
   const [updatePassword, { loading }] = useMutation<
     UpdateUserPasswordMutation,
     UpdateUserPasswordMutationVariables
-  >(UPDATE_USER_PASSWORD, {
-    onCompleted: () => {
-      setValues(initialState);
-    },
-  });
+  >(UPDATE_USER_PASSWORD);
 
-  const handleChange = (prop: keyof State) => (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword });
-  };
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLDivElement>) => {
-    event.preventDefault();
-
-    const { password, repeatedPassword } = values;
-
-    if (password !== repeatedPassword) {
-      // TODO: show an error to the user
-      return;
-    }
+  const onSubmit = (data: ChangePasswordFormData) => {
+    const { password } = data;
 
     updatePassword({
       variables: {
@@ -106,66 +83,30 @@ export const AccountSecurityForm: React.FC = () => {
   };
 
   return (
-    <Card variant="outlined" component="form" onSubmit={handleSubmit}>
+    <Card
+      variant="outlined"
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <CardHeader title="Change password" />
       <Divider />
       <StyledCardContent>
-        <FormControl variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">
-            Password
-          </InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={values.showPassword ? "text" : "password"}
-            value={values.password}
-            onChange={handleChange("password")}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {values.showPassword ? (
-                    <Visibility />
-                  ) : (
-                    <VisibilityOff />
-                  )}
-                </IconButton>
-              </InputAdornment>
-            }
-            labelWidth={70}
-          />
-        </FormControl>
-        <FormControl variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-confirm-password">
-            Confirm password
-          </InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-confirm-password"
-            type={values.showPassword ? "text" : "password"}
-            value={values.repeatedPassword}
-            onChange={handleChange("repeatedPassword")}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {values.showPassword ? (
-                    <Visibility />
-                  ) : (
-                    <VisibilityOff />
-                  )}
-                </IconButton>
-              </InputAdornment>
-            }
-            labelWidth={70}
-          />
-        </FormControl>
+        <PasswordField
+          id="outlined-adornment-password"
+          name="password"
+          label="Password"
+          inputRef={register()}
+          helperText={errors?.password?.message}
+          error={Boolean(errors?.password?.message)}
+        />
+        <PasswordField
+          id="outlined-adornment-repeated-password"
+          name="repeatedPassword"
+          label="Repeat password"
+          inputRef={register()}
+          helperText={errors?.repeatedPassword?.message}
+          error={Boolean(errors?.repeatedPassword?.message)}
+        />
       </StyledCardContent>
       <Divider />
       <StyledCardActions>

@@ -48,7 +48,9 @@ export class LoginResolver {
       );
     }
 
-    context.req.session.userId = user.id;
+    if (context.req.session) {
+      context.req.session.userId = user.id;
+    }
 
     return user;
   }

@@ -6,7 +6,7 @@ export class LogoutResolver {
   @Mutation(() => Boolean)
   async logout(@Ctx() context: CustomContext): Promise<boolean> {
     return new Promise((resolve, reject) =>
-      context.req.session.destroy((error) => {
+      context.req.session?.destroy((error) => {
         if (error) {
           console.log(error);
           return reject(false);

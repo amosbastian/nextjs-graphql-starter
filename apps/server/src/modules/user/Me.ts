@@ -6,13 +6,17 @@ import { CustomContext } from "../../types/CustomContext";
 export class MeResolver {
   @Query(() => User, { nullable: true })
   async me(@Ctx() context: CustomContext): Promise<User | null> {
-    const userId = context.req.session.userId;
+    const userId = context.req.session?.userId;
 
     if (!userId) {
       return null;
     }
 
     const user = await User.findOne(userId);
+
+    if (!user) {
+      return null;
+    }
 
     return user;
   }

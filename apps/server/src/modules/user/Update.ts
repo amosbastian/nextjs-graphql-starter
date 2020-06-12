@@ -20,19 +20,19 @@ class UpdateUserInput {
   @MinLength(3, { message: "Minimum length is $constraint1" })
   @MaxLength(30, { message: "Maximum length is $constraint1" })
   @IsUsernameAlreadyExist()
-  username: string | null;
+  username: string;
 
   @Field(() => String, { nullable: true })
   @IsEmail()
   @IsEmailAlreadyExist()
-  email: string | null;
+  email: string;
 
   @Field(() => String, { nullable: true })
-  pictureId: string | null;
+  pictureId: string;
 
   @Field(() => String, { nullable: true })
   @MinLength(6, { message: "Minimum length is $constraint1" })
-  password: string | null;
+  password: string;
 }
 
 @Resolver()
@@ -43,7 +43,7 @@ export class UpdateUserResolver {
     @Arg("input") input: UpdateUserInput,
     @Ctx() context: CustomContext,
   ): Promise<User | null> {
-    const userId = id || context.req.session.userId;
+    const userId = id || context.req.session?.userId;
 
     if (!id && !userId) {
       return null;
@@ -55,6 +55,11 @@ export class UpdateUserResolver {
 
     await User.update({ id: id || Number(userId) }, input);
     const user = await User.findOne(id);
+
+    if (!user) {
+      return null;
+    }
+
     return user;
   }
 }

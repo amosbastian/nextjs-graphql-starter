@@ -37,13 +37,18 @@ const ACCOUNT_GENERAL_SETTINGS_USER_QUERY = gql`
 `;
 
 export const AccountGeneralSettings: React.FC = () => {
-  const { data, loading } = useQuery<AccountGeneralSettingsUserQuery>(
-    ACCOUNT_GENERAL_SETTINGS_USER_QUERY,
-  );
+  const { data, error, loading } = useQuery<
+    AccountGeneralSettingsUserQuery
+  >(ACCOUNT_GENERAL_SETTINGS_USER_QUERY);
 
-  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error...</div>;
+  if (loading || !data) return <div>Loading...</div>;
 
   const { me } = data;
+
+  if (!me) {
+    return null;
+  }
 
   return (
     <StyledDiv>

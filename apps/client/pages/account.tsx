@@ -5,12 +5,12 @@ import AccountTabs from "../components/account-tabs/account-tabs";
 import AccountTabPanel from "../components/account-tab-panel/account-tab-panel";
 import AccountGeneralSettings from "../components/account-general-settings/account-general-settings";
 import AccountSecurity from "../components/account-security/account-security";
+import useUser from "../hooks/use-user";
+import LoadingPage from "../components/loading-page/loading-page";
 
-/* eslint-disable-next-line */
-export interface AccountProps {}
-
-export const Account: React.FC<AccountProps> = () => {
+export const Account: React.FC = () => {
   const [value, setValue] = React.useState(0);
+  const { data } = useUser();
 
   const handleChange = (
     event: React.ChangeEvent<{}>,
@@ -19,17 +19,21 @@ export const Account: React.FC<AccountProps> = () => {
     setValue(newValue);
   };
 
-  return (
-    <SiteLayout>
-      <AccountTabs onChange={handleChange} value={value} />
-      <AccountTabPanel value={value} index={0}>
-        <AccountGeneralSettings />
-      </AccountTabPanel>
-      <AccountTabPanel value={value} index={1}>
-        <AccountSecurity />
-      </AccountTabPanel>
-    </SiteLayout>
-  );
+  if (data && data.me) {
+    return (
+      <SiteLayout>
+        <AccountTabs onChange={handleChange} value={value} />
+        <AccountTabPanel value={value} index={0}>
+          <AccountGeneralSettings />
+        </AccountTabPanel>
+        <AccountTabPanel value={value} index={1}>
+          <AccountSecurity />
+        </AccountTabPanel>
+      </SiteLayout>
+    );
+  }
+
+  return <LoadingPage />;
 };
 
 export default withApollo(Account);

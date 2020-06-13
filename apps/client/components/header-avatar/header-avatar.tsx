@@ -69,6 +69,10 @@ export const HeaderAvatar = () => {
     logout();
   };
 
+  const src = data?.me?.pictureId
+    ? cloudinaryUrl(data.me.pictureId)
+    : undefined;
+
   return (
     <div>
       <StyledIconButton
@@ -76,10 +80,7 @@ export const HeaderAvatar = () => {
         aria-haspopup="true"
         onClick={handleClick}
       >
-        <StyledAvatar
-          alt={data?.me?.username}
-          src={cloudinaryUrl(data?.me?.pictureId)}
-        />
+        <StyledAvatar alt={data?.me?.username} src={src} />
       </StyledIconButton>
       <Menu
         anchorEl={anchorEl}

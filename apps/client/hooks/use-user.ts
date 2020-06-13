@@ -19,7 +19,7 @@ const useUser = (redirect = true) => {
   useEffect(() => {
     if (
       !queryResult.loading &&
-      queryResult.data.me === null &&
+      queryResult.data?.me === null &&
       typeof window !== "undefined" &&
       redirect
     ) {

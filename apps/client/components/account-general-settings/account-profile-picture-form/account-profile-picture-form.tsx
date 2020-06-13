@@ -79,7 +79,9 @@ export const AccountProfilePictureForm: React.FC<AccountProfilePictureFormProps>
   const imageSelectHandler = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setImage(event.target.files[0]);
+    if (event.target.files) {
+      setImage(event.target.files[0]);
+    }
   };
 
   const submitHandler = async (
@@ -87,11 +89,15 @@ export const AccountProfilePictureForm: React.FC<AccountProfilePictureFormProps>
   ) => {
     event.preventDefault();
 
+    if (!image) {
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", image);
     formData.append(
       "upload_preset",
-      process.env.cloudinaryUploadPreset,
+      process.env.cloudinaryUploadPreset as string,
     );
 
     const response = await fetch(
@@ -104,7 +110,6 @@ export const AccountProfilePictureForm: React.FC<AccountProfilePictureFormProps>
 
     const content = await response.json();
     const pictureId = content.public_id;
-    console.log(pictureId);
 
     // Image could not be uploaded to Cloudinary
     if (!pictureId) return;
@@ -124,7 +129,10 @@ export const AccountProfilePictureForm: React.FC<AccountProfilePictureFormProps>
       onSubmit={submitHandler}
     >
       <StyledCardContent>
-        <StyledAvatar alt="Username" src={src || newImageSrc} />
+        <StyledAvatar
+          alt="Username"
+          src={(src || newImageSrc) ?? undefined}
+        />
         <Typography align="center">{username}</Typography>
       </StyledCardContent>
       <StyledDiv>

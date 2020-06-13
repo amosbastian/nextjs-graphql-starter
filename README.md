@@ -4,7 +4,7 @@
 
 ## Live demo
 
-TODO:
+TODO
 
 ## Built with
 
@@ -16,6 +16,7 @@ TODO:
 * Material UI
 * Styled Components
 * Apollo Client
+* Cloudinary
 
 ### Backend
 
@@ -30,11 +31,12 @@ TODO:
 - [x] Password reset (backend only, frontend WIP)
 - [x] Confirmation email (backend only, frontend WIP)
 - [x] GraphQL code generation
-- [ ] PWA
-- [ ] User profile details editing
-- [ ] Image uploading
+- [x] User profile details editing
+- [x] Image uploading
 
 ## Getting started
+
+### Without Docker
 
 1. Install packages with `yarn` or `npm`
 
@@ -45,4 +47,8 @@ TODO:
 4. Use `nx serve server` to start the server
 
 5. Use `nx serve client` to start the client
+
+### With Docker
+
+TODO
 
